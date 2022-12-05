@@ -32,27 +32,32 @@ public class Manager {
         subtasks.clear();
     }
     public void deleteAllEpics(){
-        epics.clear();
+        epics.clear();//нужно ли так же удалить подзадачи?
     }
     //методы для получения по айди
-    public Task getTaskByID(int id){
+    public Task getTaskById(int id){
         return tasks.get(id);
     }
-    public Epic getEpicByID(int id){
+    public Epic getEpicById(int id){
         return epics.get(id);
     }
-    public Subtask getSubtaskByID(int id){
+    public Subtask getSubtaskById(int id){
         return subtasks.get(id);
     }
     // методы для удаления по айди
-    public void removeTaskByID(int id) {
+    public void removeTaskById(int id) {
         tasks.remove(id);
     }
-    public void removeEpicByID(int id) {
-        epics.remove(id);
+    public void removeEpicById(int id) {
+        epics.remove(id);//нужно так же удалить подзадачи
     }
-    public void removeSubtaskByID(int id) {
+    public void removeSubtaskById(int id) {
         subtasks.remove(id);
     }
-
+    public void createTask(Task task){
+        tasks.put(task.getId(), task);
+    }
+    public void updateTask(Task task){
+        tasks.put(task.getId(), task);
+    }
 }
