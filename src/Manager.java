@@ -32,7 +32,8 @@ public class Manager {
         subtasks.clear();
     }
     public void deleteAllEpics(){
-        epics.clear();//нужно ли так же удалить подзадачи?
+        epics.clear();
+        subtasks.clear();
     }
     //методы для получения по айди
     public Task getTaskById(int id){
@@ -49,15 +50,32 @@ public class Manager {
         tasks.remove(id);
     }
     public void removeEpicById(int id) {
-        epics.remove(id);//нужно так же удалить подзадачи
+        for (Integer i : epics.get(id).ides){ //удаляем подзадачи вместе с эпиком
+            subtasks.remove(i);
+        }
+        epics.remove(id);
     }
     public void removeSubtaskById(int id) {
         subtasks.remove(id);
     }
+    //методы по созданию задач
     public void createTask(Task task){
         tasks.put(task.getId(), task);
     }
+    public void createEpic(Epic epic){
+        epics.put(epic.getId(), epic);
+    }
+    public void createTask(Subtask subtask){
+        subtasks.put(subtask.getId(), subtask); //!!!нужно реализовать передачу айди эпику, и прием айди от эпика
+    }
+    //методы по обновлению задач
     public void updateTask(Task task){
         tasks.put(task.getId(), task);
+    }
+    public void updateEpic(Epic epic){
+        epics.put(epic.getId(), epic);
+    }
+    public void updateTask(Subtask subtask){
+        subtasks.put(subtask.getId(), subtask);
     }
 }
