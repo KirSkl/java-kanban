@@ -30,6 +30,10 @@ public class Manager {
     }
     public void deleteAllSubtasks(){
         subtasks.clear();
+        for(Epic epic: epics.values()) { //удалить все айди из эпиков
+            epic.ides.clear();
+        }
+
     }
     public void deleteAllEpics(){
         epics.clear();
@@ -56,7 +60,10 @@ public class Manager {
         epics.remove(id);
     }
     public void removeSubtaskById(int id) {
+        Integer idSubtask=id;
+        epics.get(subtasks.get(id).getIdEpic()).ides.remove(idSubtask);//удаляю айди субтаска из эпика
         subtasks.remove(id);
+
     }
     //методы по созданию задач
     public void createTask(Task task){
@@ -76,7 +83,16 @@ public class Manager {
     public void updateEpic(Epic epic){
         epics.put(epic.getId(), epic);
     }
-    public void updateTask(Subtask subtask){
+    public void updateSubtask(Subtask subtask){
         subtasks.put(subtask.getId(), subtask);
+    }
+
+    //получение подзадач
+    public ArrayList<Subtask> getSubtasksOfEpic(Epic epic){ //можно также использовать айди эпика
+        ArrayList<Subtask> subtasksOfEpics = new ArrayList<>();
+        for (Integer id : epic.ides){
+            subtasksOfEpics.add(subtasks.get(id));
+        }
+        return subtasksOfEpics;
     }
 }
