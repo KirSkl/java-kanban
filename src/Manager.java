@@ -11,18 +11,48 @@ public class Manager {
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
-    public ArrayList<Task> getAllTasks(HashMap hashMap){// Передаю в аргумент хешмап, потому что их три
-        ArrayList<Task> allTasks = new ArrayList<Task>(hashMap.values()); //привожу все к родительскому классу Task,
-        return allTasks; // чтобы не писать для каждого класса свой метод. Дальше так же.
+    //методы для получения списка задач
+    public ArrayList<Task> getAllTasks(){
+        ArrayList<Task> allTasks = new ArrayList<>(tasks.values());
+        return allTasks;
+    }
+    public ArrayList<Epic> getAllEpics(){
+        ArrayList<Epic> allEpics = new ArrayList<>(epics.values());
+        return allEpics;
+    }
+    public ArrayList<Subtask> getAllSubtasks(){
+        ArrayList<Subtask> allSubtasks = new ArrayList<>(subtasks.values());
+        return allSubtasks;
+    }
+    // методы для удаления
+    public void deleteAllTasks(){
+        tasks.clear();
+    }
+    public void deleteAllSubtasks(){
+        subtasks.clear();
+    }
+    public void deleteAllEpics(){
+        epics.clear();
+    }
+    //методы для получения по айди
+    public Task getTaskByID(int id){
+        return tasks.get(id);
+    }
+    public Epic getEpicByID(int id){
+        return epics.get(id);
+    }
+    public Subtask getSubtaskByID(int id){
+        return subtasks.get(id);
+    }
+    // методы для удаления по айди
+    public void removeTaskByID(int id) {
+        tasks.remove(id);
+    }
+    public void removeEpicByID(int id) {
+        epics.remove(id);
+    }
+    public void removeSubtaskByID(int id) {
+        subtasks.remove(id);
     }
 
-    public void deleteAllTasks(HashMap hashMap){
-        hashMap.clear();
-    }
-    public Task getByID(HashMap hashMap, int id){
-        return (Task) hashMap.get(id);
-    }
-    public void removeByID(HashMap hashMap, int id) {
-        hashMap.remove(id);
-    }
 }
