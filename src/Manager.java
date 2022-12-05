@@ -11,10 +11,18 @@ public class Manager {
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
-    public ArrayList<Task> getAllTasks(HashMap hashMap){
-        ArrayList<Task> allTasks = new ArrayList<Task>(hashMap.values());
-        return allTasks;
+    public ArrayList<Task> getAllTasks(HashMap hashMap){// Передаю в аргумент хешмап, потому что их три
+        ArrayList<Task> allTasks = new ArrayList<Task>(hashMap.values()); //привожу все к родительскому классу Task,
+        return allTasks; // чтобы не писать для каждого класса свой метод. Дальше так же.
     }
 
-
+    public void deleteAllTasks(HashMap hashMap){
+        hashMap.clear();
+    }
+    public Task getByID(HashMap hashMap, int id){
+        return (Task) hashMap.get(id);
+    }
+    public void removeByID(HashMap hashMap, int id) {
+        hashMap.remove(id);
+    }
 }
