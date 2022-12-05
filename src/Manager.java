@@ -66,7 +66,8 @@ public class Manager {
         epics.put(epic.getId(), epic);
     }
     public void createTask(Subtask subtask){
-        subtasks.put(subtask.getId(), subtask); //!!!нужно реализовать передачу айди эпику, и прием айди от эпика
+        subtasks.put(subtask.getId(), subtask);
+        epics.get(subtask.getIdEpic()).ides.add(subtask.getId());//сообщаю эпику айдти субтаска
     }
     //методы по обновлению задач
     public void updateTask(Task task){
