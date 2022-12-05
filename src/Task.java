@@ -4,7 +4,7 @@ public class Task {
     String title;
     String description;
     private int id;
-    String status;
+    protected String status;
 
     public Task(String title, String description, String status) {
         this.title = title;
@@ -14,5 +14,12 @@ public class Task {
     }
     public int getId() {
         return id;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }

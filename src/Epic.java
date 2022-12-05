@@ -1,8 +1,10 @@
 import java.util.ArrayList;
 
 public class Epic extends Task{
-    public Epic(String title, String description, String status) {
+
+        public Epic(String title, String description, String status) {
         super(title, description, status);
+        this.status = "NEW";
     }
 
     ArrayList<Integer> ides = new ArrayList<>();

@@ -85,6 +85,17 @@ public class Manager {
     }
     public void updateSubtask(Subtask subtask){
         subtasks.put(subtask.getId(), subtask);
+        if (subtask.status=="in progress") { //
+            epics.get(subtask.getIdEpic()).setStatus("IN_PROGRESS");
+        } else if (subtask.status=="done"){
+            for (Integer id : epics.get(subtask.getIdEpic()).ides){ //проверяем другие субтаски
+                if (subtasks.get(id).getStatus()!="done"){ //если какой-то не done, устанавливаем in progress
+                    epics.get(subtask.getIdEpic()).setStatus("IN_PROGRESS");
+                } else {
+                    epics.get(subtask.getIdEpic()).setStatus("DONE");
+                }
+            }
+        }
     }
 
     //получение подзадач
