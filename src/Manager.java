@@ -13,16 +13,13 @@ public class Manager {
 
     //методы для получения списка задач
     public ArrayList<Task> getAllTasks(){
-        ArrayList<Task> allTasks = new ArrayList<>(tasks.values());
-        return allTasks;
+        return new ArrayList<>(tasks.values());
     }
     public ArrayList<Epic> getAllEpics(){
-        ArrayList<Epic> allEpics = new ArrayList<>(epics.values());
-        return allEpics;
+        return new ArrayList<>(epics.values());
     }
     public ArrayList<Subtask> getAllSubtasks(){
-        ArrayList<Subtask> allSubtasks = new ArrayList<>(subtasks.values());
-        return allSubtasks;
+        return new ArrayList<>(subtasks.values());
     }
     // методы для удаления
     public void deleteAllTasks(){
@@ -72,7 +69,7 @@ public class Manager {
     public void createEpic(Epic epic){
         epics.put(epic.getId(), epic);
     }
-    public void createTask(Subtask subtask){
+    public void createSubtask(Subtask subtask){
         subtasks.put(subtask.getId(), subtask);
         epics.get(subtask.getIdEpic()).ides.add(subtask.getId());//сообщаю эпику айдти субтаска
     }
@@ -85,14 +82,16 @@ public class Manager {
     }
     public void updateSubtask(Subtask subtask){
         subtasks.put(subtask.getId(), subtask);
-        if (subtask.status=="in progress") { //
-            epics.get(subtask.getIdEpic()).setStatus("IN_PROGRESS");
-        } else if (subtask.status=="done"){
-            for (Integer id : epics.get(subtask.getIdEpic()).ides){ //проверяем другие субтаски
-                if (subtasks.get(id).getStatus()!="done"){ //если какой-то не done, устанавливаем in progress
-                    epics.get(subtask.getIdEpic()).setStatus("IN_PROGRESS");
+        String inProgress = "IN_PROGRESS";
+        String done = "DONE";
+        if (subtask.status.equals(inProgress)) { //
+            epics.get(subtask.getIdEpic()).setStatus(inProgress);
+        } else if (subtask.status.equals(done)){
+            for (Integer iD : epics.get(subtask.getIdEpic()).ides) { //проверяем другие субтаски
+                if (!subtasks.get(iD).getStatus().equals(done)) { //если какой-то не done, устанавливаем in progress
+                    epics.get(subtask.getIdEpic()).setStatus(inProgress);
                 } else {
-                    epics.get(subtask.getIdEpic()).setStatus("DONE");
+                    epics.get(subtask.getIdEpic()).setStatus(done);
                 }
             }
         }
@@ -101,8 +100,8 @@ public class Manager {
     //получение подзадач
     public ArrayList<Subtask> getSubtasksOfEpic(Epic epic){ //можно также использовать айди эпика
         ArrayList<Subtask> subtasksOfEpics = new ArrayList<>();
-        for (Integer id : epic.ides){
-            subtasksOfEpics.add(subtasks.get(id));
+        for (Integer iD : epic.ides){
+            subtasksOfEpics.add(subtasks.get(iD));
         }
         return subtasksOfEpics;
     }
