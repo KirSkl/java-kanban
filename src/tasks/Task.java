@@ -2,12 +2,10 @@ package tasks;
 
 import manager.Manager;
 
-import java.util.ArrayList;
-
 public class Task {
-    String title;
-    String description;
-    private int id;
+    protected String title;
+    protected String description;
+    protected int id;
     protected String status;
 
     public Task(String title, String description, String status, Manager manager) {
