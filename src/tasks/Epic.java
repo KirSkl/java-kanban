@@ -1,7 +1,6 @@
 package tasks;
 
 import manager.Manager;
-
 import java.util.ArrayList;
 
 public class Epic extends Task {
