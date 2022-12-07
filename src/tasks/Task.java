@@ -1,3 +1,7 @@
+package tasks;
+
+import manager.Manager;
+
 import java.util.ArrayList;
 
 public class Task {
@@ -6,10 +10,10 @@ public class Task {
     private int id;
     protected String status;
 
-    public Task(String title, String description, String status) {
+    public Task(String title, String description, String status, Manager manager) {
         this.title = title;
         this.description = description;
-        this.id = Manager.getId();
+        this.id = manager.getId();
         this.status = status;
     }
     public int getId() {
