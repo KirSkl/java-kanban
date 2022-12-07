@@ -69,12 +69,9 @@ public class Manager {
         epics.remove(id);
     }
     public void removeSubtaskById(int id) {
-        //Integer idSubtask=id;
         changeEpicStatus(subtasks.get(id));
         epics.get(subtasks.get(id).getIdEpic()).removeFromIds(id);//удаляю айди субтаска из эпика
         subtasks.remove(id);
-
-
     }
     //методы по созданию задач
     public void createTask(Task task){
@@ -98,28 +95,27 @@ public class Manager {
         subtasks.put(subtask.getId(), subtask);
         changeEpicStatus(subtask);
     }
-
-        private void changeEpicStatus(Subtask subtask){
-            for (Integer iD : epics.get(subtask.getIdEpic()).getIds()){
-                if (subtasks.get(iD).getStatus().equals(NEW)) {
-                    epics.get(subtask.getIdEpic()).setStatus(NEW);
-                } else {
-                    epics.get(subtask.getIdEpic()).setStatus(IN_PROGRESS);
-                    break;
-                }
-            }
-            if (epics.get(subtask.getIdEpic()).getStatus().equals(NEW)){
-                return;
-            }
-            for (Integer iD : epics.get(subtask.getIdEpic()).getIds()) {
-                if (subtasks.get(iD).getStatus().equals(DONE)) {
-                    epics.get(subtask.getIdEpic()).setStatus(DONE);
-                } else {
-                    epics.get(subtask.getIdEpic()).setStatus(IN_PROGRESS);
-                    break;
-                }
+    private void changeEpicStatus(Subtask subtask){
+        for (Integer iD : epics.get(subtask.getIdEpic()).getIds()){
+            if (subtasks.get(iD).getStatus().equals(NEW)) {
+                epics.get(subtask.getIdEpic()).setStatus(NEW);
+            } else {
+                epics.get(subtask.getIdEpic()).setStatus(IN_PROGRESS);
+                break;
             }
         }
+        if (epics.get(subtask.getIdEpic()).getStatus().equals(NEW)){
+            return;
+        }
+        for (Integer iD : epics.get(subtask.getIdEpic()).getIds()) {
+            if (subtasks.get(iD).getStatus().equals(DONE)) {
+                epics.get(subtask.getIdEpic()).setStatus(DONE);
+            } else {
+                epics.get(subtask.getIdEpic()).setStatus(IN_PROGRESS);
+                break;
+            }
+        }
+    }
     //получение подзадач
     public ArrayList<Subtask> getSubtasksOfEpic(Epic epic){ //можно также использовать айди эпика
         ArrayList<Subtask> subtasksOfEpics = new ArrayList<>();
