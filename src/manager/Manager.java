@@ -42,7 +42,6 @@ public class Manager {
             epic.setStatus(NEW);//точно не понял, какой должен быть статус у эпика, у которого нет подзадач,
             // но вроде так?
         }
-
     }
     public void deleteAllEpics(){
         epics.clear();
@@ -69,8 +68,8 @@ public class Manager {
         epics.remove(id);
     }
     public void removeSubtaskById(int id) {
-        changeEpicStatus(subtasks.get(id));
-        epics.get(subtasks.get(id).getIdEpic()).removeFromIds(id);//удаляю айди субтаска из эпика
+        epics.get(subtasks.get(id).getIdEpic()).removeFromIds(id);
+        changeEpicStatus(subtasks.get(id));//удаляю айди субтаска из эпика
         subtasks.remove(id);
     }
     //методы по созданию задач
