@@ -9,9 +9,9 @@ import java.util.HashMap;
 
 public class Manager {
     private int id=0;
-    static final String IN_PROGRESS = "IN_PROGRESS";
-    static final String DONE = "DONE";
-    static final String NEW = "NEW";
+    private static final String IN_PROGRESS = "IN_PROGRESS";
+    private static final String DONE = "DONE";
+    private static final String NEW = "NEW";
 
     public int getId() {
         return id++;
@@ -98,40 +98,7 @@ public class Manager {
         subtasks.put(subtask.getId(), subtask);
         changeEpicStatus(subtask);
     }
-    /*private void changeEpicStatus (Subtask subtask){
-        if (subtask.status.equals(IN_PROGRESS)) {
-            epics.get(subtask.getIdEpic()).setStatus(IN_PROGRESS);
-        } else if (subtask.status.equals(DONE)){
-            for (Integer iD : epics.get(subtask.getIdEpic()).ids) { //проверяем другие субтаски
-                if (!subtasks.get(iD).getStatus().equals(DONE)) { //если какой-то не done, устанавливаем in progress
-                    epics.get(subtask.getIdEpic()).setStatus(IN_PROGRESS);
-                } else {
-                    epics.get(subtask.getIdEpic()).setStatus(DONE);
-                }
-            }
-        }
-    }*/
 
-
-
-    /*private void changeEpicStatus (Subtask subtask) {
-        for (Integer iD : epics.get(subtask.getIdEpic()).getIds()) {
-            if (subtasks.get(iD).getStatus().equals(IN_PROGRESS)) {
-                epics.get(subtask.getIdEpic()).setStatus(IN_PROGRESS);
-                return;
-            } else if (subtasks.get(iD).getStatus().equals(DONE)) {
-                epics.get(subtask.getIdEpic()).setStatus(DONE);
-                for (Integer id1 : epics.get(subtask.getIdEpic()).getIds()) {//еще раз запускаем цикл, чтобы проверить
-                    if (subtasks.get(id1).getStatus().equals(NEW)) { //другие сабтаски
-                        epics.get(subtask.getIdEpic()).setStatus(IN_PROGRESS);
-                        return;
-                    } else return;
-                }
-            } else {
-                epics.get(subtask.getIdEpic()).setStatus(NEW);
-            }
-        }
-    }*/
         private void changeEpicStatus(Subtask subtask){
             for (Integer iD : epics.get(subtask.getIdEpic()).getIds()){
                 if (subtasks.get(iD).getStatus().equals(NEW)) {
