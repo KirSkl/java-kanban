@@ -81,6 +81,9 @@ public class Manager {
     public void createSubtask(Subtask subtask){
         subtasks.put(subtask.getId(), subtask);
         epics.get(subtask.getIdEpic()).setIds(subtask.getId());//сообщаю эпику айдти субтаска
+        changeEpicStatus(subtask); // не добавил изначально, потому что не понимал, могут ли субтаски приходить
+        //сразу со статусом не NEW (то есть конструктор, конечно, позволяет, а вот как будет дальше программа
+        //организована - пока не знаю. Но согласен, что добавить стоит
     }
     //методы по обновлению задач
     public void updateTask(Task task){
