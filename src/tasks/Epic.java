@@ -1,12 +1,14 @@
 package tasks;
 
-import manager.Manager;
+import Manager.InMemoryTaskManager;
+import Manager.StatusOfTask;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    public Epic(String title, String description, String status, Manager manager) {
+    public Epic(String title, String description, StatusOfTask status, InMemoryTaskManager manager) {
         super(title, description, status, manager);
-        this.status = "NEW";
+        this.status = StatusOfTask.NEW;
     }
 
     private ArrayList<Integer> ids = new ArrayList<>();
