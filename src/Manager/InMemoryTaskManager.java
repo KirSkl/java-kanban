@@ -6,11 +6,10 @@ import tasks.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static Manager.StatusOfTask.NEW;
+
 public class InMemoryTaskManager implements TaskManager {
     private int id=0;
-    private static final String IN_PROGRESS = "IN_PROGRESS";
-    private static final String DONE = "DONE";
-    private static final String NEW = "NEW";
 
     @Override
     public int getId() {
@@ -116,21 +115,21 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void changeEpicStatus(Subtask subtask){
         for (Integer iD : epics.get(subtask.getIdEpic()).getIds()){
-            if (subtasks.get(iD).getStatus().equals(NEW)) {
+            if (subtasks.get(iD).getStatus() == StatusOfTask.NEW) {
                 epics.get(subtask.getIdEpic()).setStatus(NEW);
             } else {
-                epics.get(subtask.getIdEpic()).setStatus(IN_PROGRESS);
+                epics.get(subtask.getIdEpic()).setStatus(StatusOfTask.IN_PROGRESS);
                 break;
             }
         }
-        if (epics.get(subtask.getIdEpic()).getStatus().equals(NEW)){
+        if (epics.get(subtask.getIdEpic()).getStatus() == StatusOfTask.NEW){
             return;
         }
         for (Integer iD : epics.get(subtask.getIdEpic()).getIds()) {
-            if (subtasks.get(iD).getStatus().equals(DONE)) {
-                epics.get(subtask.getIdEpic()).setStatus(DONE);
+            if (subtasks.get(iD).getStatus() == StatusOfTask.DONE) {
+                epics.get(subtask.getIdEpic()).setStatus(StatusOfTask.DONE);
             } else {
-                epics.get(subtask.getIdEpic()).setStatus(IN_PROGRESS);
+                epics.get(subtask.getIdEpic()).setStatus(StatusOfTask.IN_PROGRESS);
                 break;
             }
         }

@@ -1,14 +1,15 @@
 package tasks;
 
-import manager.Manager;
+import Manager.InMemoryTaskManager;
+import Manager.StatusOfTask;
 
 public class Task {
     protected String title;
     protected String description;
     protected int id;
-    protected String status;
+    protected StatusOfTask status;
 
-    public Task(String title, String description, String status, Manager manager) {
+    public Task(String title, String description, StatusOfTask status, InMemoryTaskManager manager) {
         this.title = title;
         this.description = description;
         this.id = manager.getId();
@@ -17,11 +18,11 @@ public class Task {
     public int getId() {
         return id;
     }
-    public void setStatus(String status) {
+    public void setStatus(StatusOfTask status) {
         this.status = status;
     }
 
-    public String getStatus() {
+    public StatusOfTask getStatus() {
         return status;
     }
 }
