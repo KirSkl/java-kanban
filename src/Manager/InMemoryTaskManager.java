@@ -5,6 +5,7 @@ import tasks.Subtask;
 import tasks.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static Manager.StatusOfTask.NEW;
 
@@ -19,6 +20,19 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private List<Task> historyTasks = new ArrayList<>();
+
+    @Override
+    public void setHistory(Task task){
+        if (historyTasks.size() < 11){
+            historyTasks.remove(0);
+        }
+        historyTasks.add(task);
+    }
+    @Override
+    public List<Task> getHistory(){
+        return historyTasks;
+    }
 
     //методы для получения списка задач
     @Override
@@ -55,14 +69,17 @@ public class InMemoryTaskManager implements TaskManager {
     //методы для получения по айди
     @Override
     public Task getTaskById(int id){
+        setHistory(tasks.get(id));
         return tasks.get(id);
     }
     @Override
     public Epic getEpicById(int id){
+        setHistory(tasks.get(id));
         return epics.get(id);
     }
     @Override
     public Subtask getSubtaskById(int id){
+        setHistory(tasks.get(id));
         return subtasks.get(id);
     }
     // методы для удаления по айди
