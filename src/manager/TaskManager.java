@@ -1,16 +1,13 @@
-package Manager;
+package manager;
 
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public interface TaskManager {
         public int getId();
-        public List<Task> getHistory();
-        public void setHistory(Task task);
+
         //методы для получения списка задач
         public ArrayList<Task> getAllTasks();
         public ArrayList<Epic> getAllEpics();
