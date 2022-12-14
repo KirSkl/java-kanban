@@ -5,7 +5,6 @@ import tasks.Subtask;
 import tasks.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import static manager.StatusOfTask.*;
 
 public class InMemoryTaskManager implements TaskManager {
