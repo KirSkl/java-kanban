@@ -2,12 +2,10 @@ package manager;
 
 public class Managers {
 
-    public static TaskManager getDefault() {
-        TaskManager taskManager = new InMemoryTaskManager();//я так понимаю, нормальную реализацию мы в след раз будем
-        return taskManager; // делать
+    public static TaskManager getDefault() { //пока не очень понятно, для чего это и как должно выглядеть
+        return new InMemoryTaskManager();    //и работать
     }
-    public static HistoryManager getDefaultHistory() {
-        HistoryManager historyManager = new InMemoryHistoryManager();
-        return historyManager;
+    public static HistoryManager getDefaultHistory() { //здесь тоже
+        return new InMemoryHistoryManager();
     }
 }
