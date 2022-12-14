@@ -1,7 +1,7 @@
 package tasks;
 
-import Manager.InMemoryTaskManager;
-import Manager.StatusOfTask;
+import manager.InMemoryTaskManager;
+import manager.StatusOfTask;
 
 public class Task {
     protected String title;
@@ -21,8 +21,13 @@ public class Task {
     public void setStatus(StatusOfTask status) {
         this.status = status;
     }
-
     public StatusOfTask getStatus() {
         return status;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public String getTitle() {
+        return title;
     }
 }
