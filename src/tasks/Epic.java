@@ -1,8 +1,7 @@
 package tasks;
 
-import Manager.InMemoryTaskManager;
-import Manager.StatusOfTask;
-
+import manager.InMemoryTaskManager;
+import manager.StatusOfTask;
 import java.util.ArrayList;
 
 public class Epic extends Task {
@@ -25,6 +24,4 @@ public class Epic extends Task {
     public void removeFromIds(int id){
         this.ids.remove(id);
     }
-
-
 }
