@@ -1,7 +1,7 @@
 package tasks;
 
 import manager.InMemoryTaskManager;
-import manager.StatusOfTask;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {

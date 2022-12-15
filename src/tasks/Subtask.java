@@ -1,7 +1,6 @@
 package tasks;
 
 import manager.InMemoryTaskManager;
-import manager.StatusOfTask;
 
 public class Subtask extends Task {
     private int idEpic;

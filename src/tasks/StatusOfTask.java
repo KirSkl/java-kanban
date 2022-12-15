@@ -1,4 +1,4 @@
-package manager;
+package tasks;
 
 public enum StatusOfTask {
     NEW,
