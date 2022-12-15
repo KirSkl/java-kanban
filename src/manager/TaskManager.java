@@ -3,14 +3,14 @@ package manager;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
-import java.util.ArrayList;
+import java.util.List;
 
- interface TaskManager {
+interface TaskManager {
         int getId();
         //методы для получения списка задач
-         ArrayList<Task> getAllTasks();
-         ArrayList<Epic> getAllEpics();
-         ArrayList<Subtask> getAllSubtasks();
+         List<Task> getAllTasks();
+         List<Epic> getAllEpics();
+         List<Subtask> getAllSubtasks();
         // методы для удаления
          void deleteAllTasks();
          void deleteAllSubtasks();
@@ -33,7 +33,7 @@ import java.util.ArrayList;
          void updateSubtask(Subtask subtask);
          void changeEpicStatus(Subtask subtask);
         //получение подзадач
-         ArrayList<Subtask> getSubtasksOfEpic(Epic epic);
+         List<Subtask> getSubtasksOfEpic(Epic epic);
     }
 
 
