@@ -21,7 +21,12 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    HistoryManager historyManager = Managers.getDefaultHistory();
+    //такой вариант еще в голову пришел
+    HistoryManager historyManager = getHistory();
+    @Override
+    public HistoryManager getHistory() {
+        return Managers.getDefaultHistory();
+    }
 
     //методы для получения списка задач
     @Override
