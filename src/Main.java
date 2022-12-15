@@ -1,14 +1,14 @@
-import manager.*;
+import manager.InMemoryTaskManager;
 import tasks.Task;
-import static manager.StatusOfTask.*;
 
+import static tasks.StatusOfTask.*;
 
 public class Main {
 
     public static void main(String[] args) {
-
+/*
         //просто тесты
-        /*InMemoryTaskManager manager = new InMemoryTaskManager();
+        InMemoryTaskManager manager = new InMemoryTaskManager();
 
         tasks.Task task = new tasks.Task("Первая задача", "ОБЫЧНАЯ", NEW, manager);
         manager.createTask(task);
@@ -56,6 +56,6 @@ public class Main {
 if (!manager.getHistory().isEmpty()) {
             for (Task task2: manager.getHistory()) {
 
-         }*/
-    }
+         }
+    }*/
 }
