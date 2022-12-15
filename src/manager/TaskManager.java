@@ -5,36 +5,35 @@ import tasks.Subtask;
 import tasks.Task;
 import java.util.ArrayList;
 
-public interface TaskManager {
-        public int getId();
-
+ interface TaskManager {
+        int getId();
         //методы для получения списка задач
-        public ArrayList<Task> getAllTasks();
-        public ArrayList<Epic> getAllEpics();
-        public ArrayList<Subtask> getAllSubtasks();
+         ArrayList<Task> getAllTasks();
+         ArrayList<Epic> getAllEpics();
+         ArrayList<Subtask> getAllSubtasks();
         // методы для удаления
-        public void deleteAllTasks();
-        public void deleteAllSubtasks();
-        public void deleteAllEpics();
+         void deleteAllTasks();
+         void deleteAllSubtasks();
+         void deleteAllEpics();
         //методы для получения по айди
-        public Task getTaskById(int id);
-        public Epic getEpicById(int id);
-        public Subtask getSubtaskById(int id);
+         Task getTaskById(int id);
+         Epic getEpicById(int id);
+         Subtask getSubtaskById(int id);
         // методы для удаления по айди
-        public void removeTaskById(int id);
-        public void removeEpicById(int id);
-        public void removeSubtaskById(int id);
+         void removeTaskById(int id);
+         void removeEpicById(int id);
+         void removeSubtaskById(int id);
         //методы по созданию задач
-        public void createTask(Task task);
-        public void createEpic(Epic epic);
-        public void createSubtask(Subtask subtask);
+         void createTask(Task task);
+         void createEpic(Epic epic);
+         void createSubtask(Subtask subtask);
         //методы по обновлению задач
-        public void updateTask(Task task);
-        public void updateEpic(Epic epic);
-        public void updateSubtask(Subtask subtask);
-        public void changeEpicStatus(Subtask subtask);
+         void updateTask(Task task);
+         void updateEpic(Epic epic);
+         void updateSubtask(Subtask subtask);
+         void changeEpicStatus(Subtask subtask);
         //получение подзадач
-        public ArrayList<Subtask> getSubtasksOfEpic(Epic epic);
+         ArrayList<Subtask> getSubtasksOfEpic(Epic epic);
     }
 
 
