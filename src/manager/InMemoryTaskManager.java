@@ -12,8 +12,6 @@ import static tasks.StatusOfTask.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private int id=0;
-
-    @Override
     public int getId() {
         return id++;
     }
@@ -21,13 +19,12 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    //такой вариант еще в голову пришел
-    HistoryManager historyManager = getHistory();
+     HistoryManager historyManager = getHistory();
+
     @Override
     public HistoryManager getHistory() {
         return Managers.getDefaultHistory();
     }
-
     //методы для получения списка задач
     @Override
     public ArrayList<Task> getAllTasks() {

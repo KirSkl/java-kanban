@@ -5,10 +5,7 @@ import tasks.Subtask;
 import tasks.Task;
 import java.util.List;
 
-interface TaskManager { // - изначально я задекларировал метод getHistory(), но потом по ТЗ перенес его в интерфейс
-        int getId();    // HistoryManager, а реализацию в InMemoryHistoryManager. Должно быть два таких метода в
-                        //программе?
-        // вот такой вариант еще в голову пришел
+interface TaskManager {
         HistoryManager getHistory();
         //методы для получения списка задач
          List<Task> getAllTasks();
