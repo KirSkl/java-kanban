@@ -6,7 +6,7 @@ import tasks.Task;
 import java.util.List;
 
 interface TaskManager {
-        HistoryManager getHistory();
+         List<Task> getHistory();
         //методы для получения списка задач
          List<Task> getAllTasks();
          List<Epic> getAllEpics();

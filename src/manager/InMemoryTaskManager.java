@@ -19,11 +19,11 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
-     HistoryManager historyManager = getHistory();
+    HistoryManager history = new InMemoryHistoryManager();
 
     @Override
-    public HistoryManager getHistory() {
-        return Managers.getDefaultHistory();
+    public List<Task> getHistory() {
+        return history.getHistory();
     }
     //методы для получения списка задач
     @Override
@@ -58,17 +58,17 @@ public class InMemoryTaskManager implements TaskManager {
     //методы для получения по айди
     @Override
     public Task getTaskById(int id) {
-        historyManager.add(tasks.get(id));
+        history.add(tasks.get(id));
         return tasks.get(id);
     }
     @Override
     public Epic getEpicById(int id) {
-        historyManager.add(epics.get(id));
+        history.add(epics.get(id));
         return epics.get(id);
     }
     @Override
     public Subtask getSubtaskById(int id) {
-        historyManager.add(subtasks.get(id));
+        history.add(subtasks.get(id));
         return subtasks.get(id);
     }
     // методы для удаления по айди
