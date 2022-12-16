@@ -14,7 +14,7 @@ public class InMemoryTaskManager implements TaskManager {
     private int id=0;
     public int getId() {
         return id++;
-    }
+    } // если здесь не сделать публичным, то тогда таски не создать(
 
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
