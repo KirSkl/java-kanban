@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
 
         //просто тесты
-        InMemoryTaskManager manager = new InMemoryTaskManager();
+        /*InMemoryTaskManager manager = new InMemoryTaskManager();
 
         tasks.Task task = new tasks.Task("Первая задача", "ОБЫЧНАЯ", NEW, manager);
         manager.createTask(task);
@@ -42,6 +42,6 @@ public class Main {
 
                 System.out.println(manager.getHistory().get(i).getTitle());
             }
-        }
+        }*/
     }
 }
