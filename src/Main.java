@@ -1,12 +1,14 @@
 import manager.InMemoryTaskManager;
 import tasks.Task;
 
+import java.util.Scanner;
+
 import static tasks.StatusOfTask.*;
 
 public class Main {
 
     public static void main(String[] args) {
-/*
+
         //просто тесты
         InMemoryTaskManager manager = new InMemoryTaskManager();
 
@@ -24,38 +26,22 @@ public class Main {
                 IN_PROGRESS, epic.getId(), manager);
 
         manager.createSubtask(subtask1);
-        //System.out.println(manager.getAllTasks().get(0).getStatus());
         manager.getTaskById(0);
-        System.out.println(manager.getEpicById(epic.getId()).getDescription());
-        System.out.println(manager.getEpicById(epic.getId()).getStatus());
-        System.out.println(manager.getSubtaskById(subtask1.getId()).getDescription());
+        System.out.println(manager.getEpicById(epic.getId()).getTitle());
+        System.out.println(manager.getEpicById(epic.getId()).getTitle());
+        System.out.println(manager.getSubtaskById(subtask1.getId()).getTitle());
+        System.out.println(manager.getSubtaskById(subtask.getId()).getTitle());
+        System.out.println(manager.getEpicById(epic.getId()).getTitle());
 
 
-        //System.out.println(manager.getAllTasks().get(1).getId());
 
-        for (Task task2  : manager.) {
 
-            if (task2!=null) {
-                System.out.println(task2.getTitle());
-            } else System.out.println("null");
+        if (!manager.getHistory().isEmpty()) {
+            for (int i = 0; i < manager.getHistory().size(); i++) {
+
+
+                System.out.println(manager.getHistory().get(i).getTitle());
+            }
         }
-
-
-
-
-
-        //System.out.println(manager.getSubtasksOfEpic(epic).get(0).getId());
-
-
-
-        //tasks.Subtask subtaskUp = new tasks.Subtask("Первая подзадача", "Необычная", StatusOfTask.DONE,
-                //epic.getId(), manager);
-
-        //manager.updateSubtask(subtaskUp);
-
-if (!manager.getHistory().isEmpty()) {
-            for (Task task2: manager.getHistory()) {
-
-         }*/
     }
 }
