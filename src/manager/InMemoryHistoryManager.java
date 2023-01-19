@@ -22,25 +22,26 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
     @Override
     public List<Task> getHistory() {
+        //System.out.println("получаем историю");
         return customLinkedList.getTasks();
     }
 
      class CustomLinkedList {
         private final Map<Integer, Node> historyTasks = new HashMap<>();
-        Node head;
-        Node tail;
+        private Node head;
+        private Node tail;
 
         private void linkLast(Task task) {
             Node node = new Node(task);
             if (historyTasks.isEmpty()) {
                 head = node;
             } else {
+                tail.next = node;
                 node.prev = tail;
             }
             tail = node;
             historyTasks.put(task.getId(), node);
         }
-
         private List getTasks() {
             List<Task> tasks = new ArrayList<>();
             tasks.add(head.task);
@@ -51,7 +52,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             }
             return tasks;
         }
-
         private void removeNode(Node node) {
             if (node.next != null) {
                 node.next.prev = node.prev;
@@ -60,7 +60,6 @@ public class InMemoryHistoryManager implements HistoryManager {
                 node.prev.next = node.next;
             } else head = node.next;
         }
-
 
         class Node {
             Task task;
@@ -72,10 +71,6 @@ public class InMemoryHistoryManager implements HistoryManager {
                 this.prev = null;
                 this.next = null;
             }
-
         }
-
     }
-
-
 }
