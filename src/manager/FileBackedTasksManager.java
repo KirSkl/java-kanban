@@ -15,82 +15,101 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     @Override
     public void deleteAllTasks() {
         super.deleteAllTasks();
-        
+        save();
     }
 
     @Override
     public void deleteAllSubtasks() {
         super.deleteAllSubtasks();
+        save();
     }
 
     @Override
     public void deleteAllEpics() {
         super.deleteAllEpics();
+        save();
     }
 
     @Override
     public Task getTaskById(int id) {
-        return super.getTaskById(id);
+        Task task = super.getTaskById(id);
+        save();
+        return task;
+
     }
 
     @Override
     public Epic getEpicById(int id) {
-        return super.getEpicById(id);
+        Epic epic =  super.getEpicById(id);
+        save();
+        return epic;
     }
 
     @Override
     public Subtask getSubtaskById(int id) {
-        return super.getSubtaskById(id);
+        Subtask subtask = super.getSubtaskById(id);
+        save();
+        return subtask;
     }
 
     @Override
     public void removeTaskById(int id) {
         super.removeTaskById(id);
+        save();
     }
 
     @Override
     public void removeEpicById(int id) {
         super.removeEpicById(id);
+        save();
     }
 
     @Override
     public void removeSubtaskById(int id) {
         super.removeSubtaskById(id);
+        save();
     }
 
     @Override
     public void createTask(Task task) {
         super.createTask(task);
+        save();
     }
 
     @Override
     public void createEpic(Epic epic) {
         super.createEpic(epic);
+        save();
     }
 
     @Override
     public void createSubtask(Subtask subtask) {
         super.createSubtask(subtask);
+        save();
     }
 
     @Override
     public void updateTask(Task task) {
         super.updateTask(task);
+        save();
     }
 
     @Override
     public void updateEpic(Epic epic) {
         super.updateEpic(epic);
+        save();
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
         super.updateSubtask(subtask);
+        save();
     }
 
     @Override
     public void changeEpicStatus(Subtask subtask) {
         super.changeEpicStatus(subtask);
+        save();
     }
 }
 
