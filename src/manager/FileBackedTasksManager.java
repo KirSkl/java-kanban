@@ -1,4 +1,4 @@
 package manager;
 
-public class FileBackedTasksManager implements TaskManager {
+public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
 }
