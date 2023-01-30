@@ -5,16 +5,19 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.io.File;
+//import java.io.FileWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
-    File file;
+    private File file;
 
     public FileBackedTasksManager (File file) {
         this.file = file;
     }
-    static String historyToString (HistoryManager manager){
+    static String historyToString (HistoryManager manager) {
         List<Task> tasks = manager.getHistory();
         List<String> ids = new ArrayList<>();
         for (Task task: tasks) {
@@ -22,8 +25,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         }
         return String.join( ",", ids);
     }
-    private void save(){
-
+    private void save() {
+        try (FileWriter fileWriter = new FileWriter(file, true)) {
+        for (Task task : getAllTasks()) {
+            fileWriter.write(task.toString()+"\n");
+        }
+        for (Task epic : getAllEpics()) {
+            fileWriter.write(epic.toString()+"\n");
+        }
+        for (Task subtasks : getAllSubtasks()) {
+            fileWriter.write(subtasks.toString()+"\n");
+        }
+        fileWriter.write("\n");
+        fileWriter.write(historyToString (history));
+        }
+        catch (IOException e) {
+            System.out.println("Ошибка записи");
+        }
     }
 
     @Override
