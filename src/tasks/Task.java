@@ -7,12 +7,14 @@ public class Task {
     protected String description;
     protected int id;
     protected StatusOfTask status;
+    protected TypeOfTask type;
 
-    public Task(String title, String description, StatusOfTask status, InMemoryTaskManager manager) {
+    public Task(String title, String description, StatusOfTask status, InMemoryTaskManager manager, TypeOfTask type) {
         this.title = title;
         this.description = description;
         this.id = manager.getId();
         this.status = status;
+        this.type = type;
     }
     public int getId() {
         return id;
@@ -28,5 +30,8 @@ public class Task {
     }
     public String getTitle() {
         return title;
+    }
+    public String toString() {
+        return id+","+type+","+title+","+status+","+type+","+description+",";
     }
 }

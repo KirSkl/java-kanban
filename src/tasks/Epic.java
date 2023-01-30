@@ -5,8 +5,8 @@ import manager.InMemoryTaskManager;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    public Epic(String title, String description, StatusOfTask status, InMemoryTaskManager manager) {
-        super(title, description, status, manager);
+    public Epic(String title, String description, StatusOfTask status, InMemoryTaskManager manager, TypeOfTask type) {
+        super(title, description, status, manager, type);
         this.status = StatusOfTask.NEW;
     }
 
