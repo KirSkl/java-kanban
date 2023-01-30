@@ -1,5 +1,6 @@
 package manager;
 
+import exceptions.ManagerSaveException;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -40,7 +41,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         fileWriter.write(historyToString (history));
         }
         catch (IOException e) {
-            System.out.println("Ошибка записи");
+            throw new ManagerSaveException();
         }
     }
 
