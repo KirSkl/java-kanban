@@ -4,12 +4,22 @@ import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
     String path;
     public FileBackedTasksManager (String path) {
         this.path = path;
     }
-
+    static String historyToString (HistoryManager manager){
+        List<Task> tasks = manager.getHistory();
+        List<String> ids = new ArrayList<>();
+        for (Task task: tasks) {
+            ids.add(String.valueOf(task.getId()));
+        }
+        return String.join( ",", ids);
+    }
     private void save(){}
 
     @Override
