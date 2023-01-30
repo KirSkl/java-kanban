@@ -4,13 +4,15 @@ import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
-    String path;
-    public FileBackedTasksManager (String path) {
-        this.path = path;
+    File file;
+
+    public FileBackedTasksManager (File file) {
+        this.file = file;
     }
     static String historyToString (HistoryManager manager){
         List<Task> tasks = manager.getHistory();
@@ -20,7 +22,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         }
         return String.join( ",", ids);
     }
-    private void save(){}
+    private void save(){
+
+    }
 
     @Override
     public void deleteAllTasks() {
