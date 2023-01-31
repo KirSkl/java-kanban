@@ -8,9 +8,9 @@ public class Subtask extends Task {
     public Subtask(String title, String description, StatusOfTask status, int idEpic, InMemoryTaskManager manager,
                    TypeOfTask type) {
         super(title, description, status, manager, type);
-        this.idEpic=idEpic;
+        this.idEpic = idEpic;
     }
-    public Subtask (String[] lines) {
+    public Subtask(String[] lines) {
         super(lines);
         idEpic = Integer.parseInt(lines[5]);
     }
@@ -19,6 +19,6 @@ public class Subtask extends Task {
     }
     @Override
     public String toString() {
-        return super.toString()+idEpic;
+        return super.toString() + idEpic;
     }
 }
