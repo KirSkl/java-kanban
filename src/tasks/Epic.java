@@ -9,6 +9,9 @@ public class Epic extends Task {
         super(title, description, status, manager, type);
         this.status = StatusOfTask.NEW;
     }
+    public Epic(String[] lines) {
+        super(lines);
+    }
 
     private ArrayList<Integer> ids = new ArrayList<>();
 

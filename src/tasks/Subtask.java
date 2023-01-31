@@ -10,6 +10,10 @@ public class Subtask extends Task {
         super(title, description, status, manager, type);
         this.idEpic=idEpic;
     }
+    public Subtask (String[] lines) {
+        super(lines);
+        idEpic = Integer.parseInt(lines[5]);
+    }
     public int getIdEpic() {
         return idEpic;
     }

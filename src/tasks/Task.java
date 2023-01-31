@@ -2,6 +2,8 @@ package tasks;
 
 import manager.InMemoryTaskManager;
 
+import static tasks.TypeOfTask.TASK;
+
 public class Task {
     protected String title;
     protected String description;
@@ -15,6 +17,13 @@ public class Task {
         this.id = manager.getId();
         this.status = status;
         this.type = type;
+    }
+    public Task(String[] lines) {
+        id = Integer.parseInt(lines[0]);
+        type = TypeOfTask.valueOf(lines[1]);
+        title = lines[2];
+        status = StatusOfTask.valueOf(lines[3]);
+        description = lines[4];
     }
     public int getId() {
         return id;
@@ -32,6 +41,6 @@ public class Task {
         return title;
     }
     public String toString() {
-        return id+","+type+","+title+","+status+","+type+","+description+",";
+        return id+","+type+","+title+","+status+","+description+",";
     }
 }
