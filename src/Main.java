@@ -1,5 +1,6 @@
 import manager.FileBackedTasksManager;
 import manager.InMemoryTaskManager;
+import manager.Util;
 import tasks.Task;
 
 import java.io.File;
@@ -12,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //просто тесты
+        /*//просто тесты
         InMemoryTaskManager manager = new InMemoryTaskManager();
         File file = new File("test.csv");
         FileBackedTasksManager manager1 = new FileBackedTasksManager(file);
@@ -48,5 +49,6 @@ public class Main {
                 System.out.println(manager1.getHistory().get(i).getTitle());
             }
         }
+        FileBackedTasksManager manager2 = Util.loadFromFile(manager1.file);*/
     }
 }
