@@ -17,35 +17,37 @@ import java.util.Map;
 public class Util {
     static FileBackedTasksManager loadFromFile(File file) throws IOException {
         List<String> lines = Files.readAllLines(Path.of(file.getPath()));
-        FileBackedTasksManager fbtm = new FileBackedTasksManager(file);
+        int noTask = 2; //количество строк, не содержащих задач
+        FileBackedTasksManager fBTM = new FileBackedTasksManager(file);
         Map<Integer, Task> allTasks = new HashMap<>(); //мапа-прослойка для нахождения задач для истории
-        for (String line : lines){
-            allTasks.put(taskFromString(line).getId(), taskFromString(line));
-        }
-        for (Task task : allTasks.values()) {
-            if (task.getType().equals("TASK")) {
-                fbtm.tasks.put(task.getId(), task);
-            } else if (task.getType().equals("EPIC")){
-                fbtm.epics.put(task.getId(), task);
+        for (int i=1; i<lines.size()-noTask; i++){
+            allTasks.put(taskFromString(lines.get(i)).getId(), taskFromString(lines.get(i)));
+            String[] fields = lines.get(i).split(",");
+            if (fields[1].equals("TASK")){
+                fBTM.tasks.put(taskFromString(lines.get(i)).getId(), taskFromString(lines.get(i)));
+            } else if (fields[1].equals("EPIC")) {
+                fBTM.epics.put(epicFromString(lines.get(i)).getId(), epicFromString(lines.get(i)));
             } else {
-                fbtm.subtasks.put(task.getId(), task);
+                fBTM.subtasks.put(subtaskFromString(lines.get(i)).getId(), subtaskFromString(lines.get(i)));
             }
         }
         String[] ids = lines.get(lines.size()-1).split(",");
         for (String id : ids){
-        fbtm.history.add(allTasks.get(Integer.parseInt(id)));
+            fBTM.history.add(allTasks.get(Integer.parseInt(id)));
         }
-        return fbtm;
+        return fBTM;
     }
     private static Task taskFromString(String value) {
         String[] fields = value.split(",");
-        if (fields[1].equals("TASK")) {
-            return new Task(fields);
-        } else if (fields[1].equals(("EPIC"))) {
-            return new Epic(fields);
-        } else {
-            return new Subtask(fields);
-        }
+        return new Task(fields);
+    }
+    private static Epic epicFromString(String value) {
+        String[] fields = value.split(",");
+        return new Epic(fields);
+    }
+    private static Subtask subtaskFromString(String value) {
+        String[] fields = value.split(",");
+        return new Subtask(fields);
     }
     static List<Integer> historyFromString(String value) {
         List<Integer> history = new ArrayList<>();
