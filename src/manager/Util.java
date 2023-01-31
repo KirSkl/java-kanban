@@ -15,7 +15,7 @@ import java.util.Map;
 
 
 public class Util {
-    static FileBackedTasksManager loadFromFile(File file) throws IOException {
+    static public FileBackedTasksManager loadFromFile(File file) throws IOException {
         List<String> lines = Files.readAllLines(Path.of(file.getPath()));
         int noTask = 2; //количество строк, не содержащих задач
         FileBackedTasksManager fBTM = new FileBackedTasksManager(file);
