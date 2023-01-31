@@ -32,7 +32,6 @@ interface TaskManager {
          void updateEpic(Epic epic);
          void updateSubtask(Subtask subtask);
          void changeEpicStatus(Subtask subtask);
-        //получение подзадач
          List<Subtask> getSubtasksOfEpic(Epic epic);
     }
 
