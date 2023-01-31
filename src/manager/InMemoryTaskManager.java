@@ -16,9 +16,9 @@ public class InMemoryTaskManager implements TaskManager {
         return id++;
     } // если здесь не сделать публичным, то тогда таски не создать(
 
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
-    private HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    protected HashMap<Integer, Task> tasks = new HashMap<>();
+    protected HashMap<Integer, Task> epics = new HashMap<>();
+    protected HashMap<Integer, Task> subtasks = new HashMap<>();
     HistoryManager history = new InMemoryHistoryManager();
 
     @Override

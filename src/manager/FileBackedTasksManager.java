@@ -1,6 +1,7 @@
 package manager;
 
 import exceptions.ManagerSaveException;
+import jdk.jshell.execution.Util;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -10,28 +11,24 @@ import java.io.File;
 //import java.io.FileWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
     public static void main(String[] args) {
         System.out.println("1");
     }
-    private Task taskFromString(String value) {
-        String[] fields = value.split(",");
-        if (fields[1].equals("TASK")) {
-            return new Task(fields);
-        } else if (fields[1].equals(("EPIC"))) {
-            return new Epic(fields);
-        } else {
-            return new Subtask(fields);
-        }
-    }
+
+
     private File file;
 
     public FileBackedTasksManager (File file) {
         this.file = file;
     }
+
     static String historyToString (HistoryManager manager) {
         List<Task> tasks = manager.getHistory();
         List<String> ids = new ArrayList<>();
@@ -40,14 +37,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         }
         return String.join( ",", ids);
     }
-    static List<Integer> historyFromString(String value) {
-        List<Integer> history = new ArrayList<>();
-        String[] ids = value.split(",");
-        for(String id : ids) {
-            history.add(Integer.parseInt(id));
-        }
-        return history;
-    }
+
     private void save() {
         try (FileWriter fileWriter = new FileWriter(file)) {
             fileWriter.write("id,type,name,status,description,epic\n");
