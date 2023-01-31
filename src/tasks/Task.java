@@ -9,6 +9,11 @@ public class Task {
     protected String description;
     protected int id;
     protected StatusOfTask status;
+
+    public TypeOfTask getType() {
+        return type;
+    }
+
     protected TypeOfTask type;
 
     public Task(String title, String description, StatusOfTask status, InMemoryTaskManager manager, TypeOfTask type) {
