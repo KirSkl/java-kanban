@@ -7,18 +7,17 @@ import tasks.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import static tasks.StatusOfTask.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private int id=0;
     public int getId() {
         return id++;
-    } // если здесь не сделать публичным, то тогда таски не создать(
+    }
 
     protected HashMap<Integer, Task> tasks = new HashMap<>();
-    protected HashMap<Integer, Task> epics = new HashMap<>();
-    protected HashMap<Integer, Task> subtasks = new HashMap<>();
+    protected HashMap<Integer, Epic> epics = new HashMap<>();
+    protected HashMap<Integer, Subtask> subtasks = new HashMap<>();
     HistoryManager history = new InMemoryHistoryManager();
 
     @Override
