@@ -9,22 +9,31 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Util {
     static FileBackedTasksManager loadFromFile(File file) throws IOException {
         List<String> lines = Files.readAllLines(Path.of(file.getPath()));
         FileBackedTasksManager fbtm = new FileBackedTasksManager(file);
-
-        for (String line : lines) {
-            if (taskFromString(line).getType().equals("TASK")) {
-                fbtm.tasks.put(taskFromString(line).getId(), taskFromString(line));
-            } else if (taskFromString(line).getType().equals("EPIC")){
-                fbtm.epics.put(taskFromString(line).getId(), taskFromString(line));
+        Map<Integer, Task> allTasks = new HashMap<>(); //мапа-прослойка для нахождения задач для истории
+        for (String line : lines){
+            allTasks.put(taskFromString(line).getId(), taskFromString(line));
+        }
+        for (Task task : allTasks.values()) {
+            if (task.getType().equals("TASK")) {
+                fbtm.tasks.put(task.getId(), task);
+            } else if (task.getType().equals("EPIC")){
+                fbtm.epics.put(task.getId(), task);
             } else {
-                fbtm.subtasks.put(taskFromString(line).getId(), taskFromString(line));
+                fbtm.subtasks.put(task.getId(), task);
             }
+        }
+        String[] ids = lines.get(lines.size()-1).split(",");
+        for (String id : ids){
+        fbtm.history.add(allTasks.get(Integer.parseInt(id)));
         }
         return fbtm;
     }
