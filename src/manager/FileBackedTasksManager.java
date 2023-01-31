@@ -40,6 +40,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         }
         return String.join( ",", ids);
     }
+    static List<Integer> historyFromString(String value) {
+        List<Integer> history = new ArrayList<>();
+        String[] ids = value.split(",");
+        for(String id : ids) {
+            history.add(Integer.parseInt(id));
+        }
+        return history;
+    }
     private void save() {
         try (FileWriter fileWriter = new FileWriter(file)) {
             fileWriter.write("id,type,name,status,description,epic\n");
