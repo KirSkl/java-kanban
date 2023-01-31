@@ -4,6 +4,7 @@ import exceptions.ManagerSaveException;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
+import tasks.TypeOfTask.*;
 
 import java.io.File;
 //import java.io.FileWriter;
@@ -13,6 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
+    public static void main(String[] args) {
+        System.out.println("1");
+    }
+    private Task taskFromString(String value) {
+        String[] fields = value.split(",");
+        if (fields[1].equals("TASK")) {
+            return new Task(fields);
+        } else if (fields[1].equals(("EPIC"))) {
+            return new Epic(fields);
+        } else {
+            return new Subtask(fields);
+        }
+    }
     private File file;
 
     public FileBackedTasksManager (File file) {
@@ -28,7 +42,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     }
     private void save() {
         try (FileWriter fileWriter = new FileWriter(file)) {
-            //добавить заголовок
+            fileWriter.write("id,type,name,status,description,epic\n");
         for (Task task : getAllTasks()) {
             fileWriter.write(task.toString()+"\n");
         }
