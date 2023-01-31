@@ -22,7 +22,7 @@ public class InMemoryTaskManager implements TaskManager {
     HistoryManager history = new InMemoryHistoryManager();
 
     @Override
-    public List<Task> getHistory() {
+    public List<Task> getHistory()  {
         return history.getHistory();
     }
     //методы для получения списка задач
