@@ -27,7 +27,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         return String.join( ",", ids);
     }
     private void save() {
-        try (FileWriter fileWriter = new FileWriter(file, true)) {
+        try (FileWriter fileWriter = new FileWriter(file)) {
+            //добавить заголовок
         for (Task task : getAllTasks()) {
             fileWriter.write(task.toString()+"\n");
         }
@@ -37,8 +38,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         for (Task subtasks : getAllSubtasks()) {
             fileWriter.write(subtasks.toString()+"\n");
         }
-        fileWriter.write("\n");
+        try {
+            fileWriter.write("\n");
+
         fileWriter.write(historyToString (history));
+        } catch (NullPointerException e) {
+            fileWriter.write("");
+        }
         }
         catch (IOException e) {
             throw new ManagerSaveException();
