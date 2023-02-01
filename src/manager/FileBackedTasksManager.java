@@ -14,12 +14,15 @@ import java.util.List;
 import static tasks.StatusOfTask.*;
 import static tasks.TypeOfTask.*;
 
-public class FileBackedTasksManager extends InMemoryTaskManager {
-
+public class FileBackedTasksManager extends InMemoryTaskManager { //метод loadFromFile я перенес в класс Util, нужно
+                                                                  //вернуть сюда?
     private final File file;
 
     public FileBackedTasksManager (File file) {
         this.file = file;
+    }
+    public static FileBackedTasksManager loadFromFile(File file) throws IOException { //вот так еще можно сделать...
+        return Util.loadFromFile(file);
     }
     static String historyToString (HistoryManager manager) {
         List<Task> tasks = manager.getHistory();
@@ -44,8 +47,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             try {
                 fileWriter.write("\n");
                 fileWriter.write(historyToString (history));
-            } catch (NullPointerException e) {
-                fileWriter.write("");
+            } catch (NullPointerException e) { //может выбросить исключение, если задачи были созданы, но не просмотрены
+                fileWriter.write("");      // и история пустая. Это не правильно?
             }
         }
         catch (IOException e) {
