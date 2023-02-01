@@ -14,11 +14,9 @@ import java.util.List;
 import static tasks.StatusOfTask.*;
 import static tasks.TypeOfTask.*;
 
-public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTasksManager extends InMemoryTaskManager {
 
-
-
-    private File file;
+    private final File file;
 
     public FileBackedTasksManager (File file) {
         this.file = file;
