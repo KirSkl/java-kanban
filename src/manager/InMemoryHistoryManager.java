@@ -40,13 +40,15 @@ public class InMemoryHistoryManager implements HistoryManager {
             tail = node;
             historyTasks.put(task.getId(), node);
         }
-        private List getTasks() {
+        private List<Task> getTasks() {
             List<Task> tasks = new ArrayList<>();
-            tasks.add(head.task);
-            Node node = head;
-            while (node.next != null) {
-                node = node.next;
-                tasks.add(node.task);
+            if (head!=null) {
+                tasks.add(head.task);
+                Node node = head;
+                while (node.next != null) {
+                    node = node.next;
+                    tasks.add(node.task);
+                }
             }
             return tasks;
         }
