@@ -8,21 +8,21 @@ import tasks.Task;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static tasks.StatusOfTask.*;
 import static tasks.TypeOfTask.*;
 
-public class FileBackedTasksManager extends InMemoryTaskManager { //метод loadFromFile я перенес в класс Util, нужно
-                                                                  //вернуть сюда?
+public class FileBackedTasksManager extends InMemoryTaskManager {
     private final File file;
 
     public FileBackedTasksManager (File file) {
         this.file = file;
-    }
-    public static FileBackedTasksManager loadFromFile(File file) throws IOException { //вот так еще можно сделать...
-        return Util.loadFromFile(file);
     }
     static String historyToString (HistoryManager manager) {
         List<Task> tasks = manager.getHistory();
@@ -32,28 +32,68 @@ public class FileBackedTasksManager extends InMemoryTaskManager { //метод l
         }
         return String.join( ",", ids);
     }
+    public static FileBackedTasksManager loadFromFile(File file) throws IOException {
+        List<String> lines = Files.readAllLines(Path.of(file.getPath()));
+        int noTask = 2; //количество строк, не содержащих задач
+        FileBackedTasksManager manager = new FileBackedTasksManager(file);
+        Map<Integer, Task> allTasks = new HashMap<>(); //мапа-прослойка для нахождения задач для истории
+        for (int i=1; i<lines.size()-noTask; i++){
+            Task task = taskFromString(lines.get(i));
+            allTasks.put(task.getId(), task);
+            switch (lines.get(i).split(",")[1]){
+                case "TASK" :
+                    manager.tasks.put(task.getId(), task);
+                    break;
+                case "EPIC" :
+                    Epic epic = epicFromString(lines.get(i));
+                    manager.epics.put(epic.getId(), epic);
+                    break;
+                default :
+                    Subtask subtask = subtaskFromString(lines.get(i));
+                    manager.subtasks.put(subtask.getId(), subtask);
+            }
+        }
+        String[] ids = lines.get(lines.size()-1).split(",");
+        for (String id : ids){
+            manager.history.add(allTasks.get(Integer.parseInt(id)));
+        }
+        return manager;
+    }
     private void save() {
         try (FileWriter fileWriter = new FileWriter(file)) {
             fileWriter.write("id,type,name,status,description,epic\n");
             for(Task task : getAllTasks()){
-            fileWriter.write(task.toString()+"\n");
+                fileWriter.write(task.toString()+"\n");
             }
             for(Task epic : getAllEpics()){
-            fileWriter.write(epic.toString()+"\n");
+                fileWriter.write(epic.toString()+"\n");
             }
             for(Task subtasks : getAllSubtasks()){
-            fileWriter.write(subtasks.toString()+"\n");
+                fileWriter.write(subtasks.toString()+"\n");
             }
-            try {
-                fileWriter.write("\n");
-                fileWriter.write(historyToString (history));
-            } catch (NullPointerException e) { //может выбросить исключение, если задачи были созданы, но не просмотрены
-                fileWriter.write("");      // и история пустая. Это не правильно?
-            }
+            fileWriter.write("\n");
+            fileWriter.write(historyToString (history));
         }
         catch (IOException e) {
             throw new ManagerSaveException();
         }
+    }
+    private static Task taskFromString(String value) {
+        return new Task(value.split(","));
+    }
+    private static Epic epicFromString(String value) {
+        return new Epic(value.split(","));
+    }
+    private static Subtask subtaskFromString(String value) {
+        return new Subtask(value.split(","));
+    }
+    static List<Integer> historyFromString(String value) {
+        List<Integer> history = new ArrayList<>();
+        String[] ids = value.split(",");
+        for(String id : ids) {
+            history.add(Integer.parseInt(id));
+        }
+        return history;
     }
     @Override
     public void deleteAllTasks() {
@@ -173,7 +213,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager { //метод l
                 System.out.println(manager1.getHistory().get(i).getTitle());
             }
         }
-        FileBackedTasksManager manager2 = Util.loadFromFile(manager1.file);
+        FileBackedTasksManager manager2 = loadFromFile(manager1.file);
         manager2.getSubtaskById(3);
         System.out.println(manager2.getHistory());
         manager2.save();
