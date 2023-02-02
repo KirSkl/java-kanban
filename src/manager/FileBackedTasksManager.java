@@ -24,13 +24,25 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public FileBackedTasksManager (File file) {
         this.file = file;
     }
-    static String historyToString (HistoryManager manager) {
-        List<Task> tasks = manager.getHistory();
-        List<String> ids = new ArrayList<>();
-        for (Task task: tasks) {
-            ids.add(String.valueOf(task.getId()));
+
+    private void save() {
+        try (FileWriter fileWriter = new FileWriter(file)) {
+            fileWriter.write("id,type,name,status,description,epic\n");
+            for(Task task : getAllTasks()){
+                fileWriter.write(task.toString()+"\n");
+            }
+            for(Task epic : getAllEpics()){
+                fileWriter.write(epic.toString()+"\n");
+            }
+            for(Task subtasks : getAllSubtasks()){
+                fileWriter.write(subtasks.toString()+"\n");
+            }
+            fileWriter.write("\n");
+            fileWriter.write(historyToString (history));
         }
-        return String.join( ",", ids);
+        catch (IOException e) {
+            throw new ManagerSaveException();
+        }
     }
     public static FileBackedTasksManager loadFromFile(File file) throws IOException {
         List<String> lines = Files.readAllLines(Path.of(file.getPath()));
@@ -59,25 +71,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
         return manager;
     }
-    private void save() {
-        try (FileWriter fileWriter = new FileWriter(file)) {
-            fileWriter.write("id,type,name,status,description,epic\n");
-            for(Task task : getAllTasks()){
-                fileWriter.write(task.toString()+"\n");
-            }
-            for(Task epic : getAllEpics()){
-                fileWriter.write(epic.toString()+"\n");
-            }
-            for(Task subtasks : getAllSubtasks()){
-                fileWriter.write(subtasks.toString()+"\n");
-            }
-            fileWriter.write("\n");
-            fileWriter.write(historyToString (history));
-        }
-        catch (IOException e) {
-            throw new ManagerSaveException();
-        }
-    }
     private static Task taskFromString(String value) {
         return new Task(value.split(","));
     }
@@ -94,6 +87,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             history.add(Integer.parseInt(id));
         }
         return history;
+    }
+    static String historyToString (HistoryManager manager) {
+        List<Task> tasks = manager.getHistory();
+        List<String> ids = new ArrayList<>();
+        for (Task task: tasks) {
+            ids.add(String.valueOf(task.getId()));
+        }
+        return String.join( ",", ids);
     }
     @Override
     public void deleteAllTasks() {
