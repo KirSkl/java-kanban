@@ -15,39 +15,41 @@ import java.util.Map;
 
 
 public class Util {
-    static public FileBackedTasksManager loadFromFile(File file) throws IOException {
-        List<String> lines = Files.readAllLines(Path.of(file.getPath()));
-        int noTask = 2; //количество строк, не содержащих задач
-        FileBackedTasksManager fBTM = new FileBackedTasksManager(file);
-        Map<Integer, Task> allTasks = new HashMap<>(); //мапа-прослойка для нахождения задач для истории
-        for (int i=1; i<lines.size()-noTask; i++){
-            allTasks.put(taskFromString(lines.get(i)).getId(), taskFromString(lines.get(i)));
-            String[] fields = lines.get(i).split(",");
-            if (fields[1].equals("TASK")){
-                fBTM.tasks.put(taskFromString(lines.get(i)).getId(), taskFromString(lines.get(i)));
-            } else if (fields[1].equals("EPIC")) {
-                fBTM.epics.put(epicFromString(lines.get(i)).getId(), epicFromString(lines.get(i)));
-            } else {
-                fBTM.subtasks.put(subtaskFromString(lines.get(i)).getId(), subtaskFromString(lines.get(i)));
+     public static FileBackedTasksManager loadFromFile(File file) throws IOException {
+         List<String> lines = Files.readAllLines(Path.of(file.getPath()));
+         int noTask = 2; //количество строк, не содержащих задач
+         FileBackedTasksManager manager = new FileBackedTasksManager(file);
+         Map<Integer, Task> allTasks = new HashMap<>(); //мапа-прослойка для нахождения задач для истории
+         for (int i=1; i<lines.size()-noTask; i++){
+            Task task = taskFromString(lines.get(i));
+            allTasks.put(task.getId(), task);
+            switch (lines.get(i).split(",")[1]){
+                case "TASK" :
+                    manager.tasks.put(task.getId(), task);
+                    break;
+                case "EPIC" :
+                    Epic epic = epicFromString(lines.get(i));
+                    manager.epics.put(epic.getId(), epic);
+                    break;
+                default :
+                    Subtask subtask = subtaskFromString(lines.get(i));
+                    manager.subtasks.put(subtask.getId(), subtask);
             }
         }
         String[] ids = lines.get(lines.size()-1).split(",");
         for (String id : ids){
-            fBTM.history.add(allTasks.get(Integer.parseInt(id)));
+            manager.history.add(allTasks.get(Integer.parseInt(id)));
         }
-        return fBTM;
+        return manager;
     }
     private static Task taskFromString(String value) {
-        String[] fields = value.split(",");
-        return new Task(fields);
+        return new Task(value.split(","));
     }
     private static Epic epicFromString(String value) {
-        String[] fields = value.split(",");
-        return new Epic(fields);
+        return new Epic(value.split(","));
     }
     private static Subtask subtaskFromString(String value) {
-        String[] fields = value.split(",");
-        return new Subtask(fields);
+        return new Subtask(value.split(","));
     }
     static List<Integer> historyFromString(String value) {
         List<Integer> history = new ArrayList<>();
