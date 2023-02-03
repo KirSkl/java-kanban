@@ -38,7 +38,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 fileWriter.write(subtasks.toString()+"\n");
             }
             fileWriter.write("\n");
-            fileWriter.write(historyToString (history));
+            fileWriter.write(historyToString(history));
         }
         catch (IOException e) {
             throw new ManagerSaveException();
@@ -52,7 +52,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         for (int i=1; i<lines.size()-noTask; i++){
             Task task = taskFromString(lines.get(i));
             allTasks.put(task.getId(), task);
-            switch (lines.get(i).split(",")[1]){
+            String[] fields = lines.get(i).split(",");
+            switch (fields[1]){
                 case "TASK" :
                     manager.tasks.put(task.getId(), task);
                     break;
@@ -60,9 +61,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     Epic epic = epicFromString(lines.get(i));
                     manager.epics.put(epic.getId(), epic);
                     break;
-                default :
+                case "SUBTASK" :
                     Subtask subtask = subtaskFromString(lines.get(i));
                     manager.subtasks.put(subtask.getId(), subtask);
+                    break;
+                default:
+                    System.out.println("Тип задачи не распознан");
             }
         }
         String[] ids = lines.get(lines.size()-1).split(",");
@@ -94,7 +98,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         for (Task task: tasks) {
             ids.add(String.valueOf(task.getId()));
         }
-        return String.join( ",", ids);
+        return String.join(",", ids);
     }
     @Override
     public void deleteAllTasks() {
