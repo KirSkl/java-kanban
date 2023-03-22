@@ -24,7 +24,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         return customLinkedList.getTasks();
     }
 
-     class CustomLinkedList {
+    class CustomLinkedList {
         private final Map<Integer, Node> historyTasks = new HashMap<>();
         private Node head;
         private Node tail;
@@ -53,13 +53,15 @@ public class InMemoryHistoryManager implements HistoryManager {
             return tasks;
         }
         private void removeNode(Node node) {
-            if (node.next != null) {
-                node.next.prev = node.prev;
-            } else tail = node.prev;
-            if (node.prev != null) {
-                node.prev.next = node.next;
-            } else {
-                head = node.next;
+            if (node!=null) {
+                if (node.next != null) {
+                    node.next.prev = node.prev;
+                } else tail = node.prev;
+                if (node.prev != null) {
+                    node.prev.next = node.next;
+                } else {
+                    head = node.next;
+                }
             }
         }
 
