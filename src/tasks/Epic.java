@@ -1,13 +1,25 @@
 package tasks;
 
 import manager.InMemoryTaskManager;
+
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Epic extends Task {
     private ArrayList<Integer> ids = new ArrayList<>();
 
-    public Epic(String title, String description, StatusOfTask status, InMemoryTaskManager manager, TypeOfTask type) {
-        super(title, description, status, manager, type);
+
+    private Instant endTime = startTime.plusSeconds(getDuration()*60);
+
+    public Epic(String title, String description, StatusOfTask status, TypeOfTask type, Instant startTime,
+                long duration) {
+        super(title, description, status, type, startTime, duration);
+        this.status = StatusOfTask.NEW;
+    }
+    public Epic(int id, String title, String description, StatusOfTask status, TypeOfTask type, Instant startTime,
+                long duration) {
+        super(id, title, description, status, type, startTime, duration);
         this.status = StatusOfTask.NEW;
     }
     public Epic(String[] lines) {
@@ -23,6 +35,26 @@ public class Epic extends Task {
         ids.clear();
     }
     public void removeFromIds(int id){
-        this.ids.remove(id);
+        this.ids.remove((Integer) id);
+    }
+    public void setEndTime(Instant endTime) {
+        this.endTime = endTime;
+    }
+    public Instant getEndTime() {
+        return endTime;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        //if (!(o instanceof Epic)) return false;
+        if (!super.equals(o)) return false;
+
+        Epic object = (Epic) o;
+
+        return Objects.equals(this.ids, object.ids);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), ids);
     }
 }
