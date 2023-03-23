@@ -1,5 +1,6 @@
 package tests;
 
+import exceptions.IntersectionException;
 import manager.TaskManager;
 import tasks.*;
 import static tasks.StatusOfTask.*;
@@ -18,6 +19,8 @@ abstract class TaskManagerTest <T extends TaskManager> {
     protected T manager;
     protected final Task task = new tasks.Task("Первая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH, 1);
     protected final Task task1 = new tasks.Task("Вторая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH, 1);
+    protected final Task task2 = new tasks.Task("Третья задача", "ОБЫЧНАЯ", NEW, TASK,
+                                                    Instant.EPOCH.plusSeconds(100), 1);
     protected final Epic epic = new tasks.Epic("Первый эпик", "обычный", NEW, EPIC, Instant.EPOCH, 0 );
     protected final Epic epic1 = new tasks.Epic("Второй эпик", "обычный", NEW, EPIC, Instant.EPOCH, 0);
 
@@ -344,5 +347,19 @@ abstract class TaskManagerTest <T extends TaskManager> {
         assertEquals(Instant.EPOCH.plusSeconds(1), newTask.getStartTime());
         assertEquals(2, newTask.getDuration());
         assertEquals(Instant.EPOCH.plusSeconds(121), newTask.getEndTime());
+    }
+    @Test
+    protected void shouldReturnPrioritizedList() {
+        Task newTask = manager.createTask(task2);
+        Task newTask1 = manager.createTask(task);
+
+        assertEquals(List.of(newTask1, newTask), manager.getPrioritizedTasks());
+    }
+    @Test
+    protected void shouldNotToAddToPrioritizedTasks() {
+        Task newTask = manager.createTask(task);
+        Task newTask1 = manager.createTask(task1);
+
+        assertEquals(List.of(newTask), manager.getPrioritizedTasks());
     }
 }
