@@ -59,22 +59,20 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 allTasks.put(task.getId(), task);
                 String[] fields = lines.get(i).split(",");
                 switch (fields[1]) {
-                    case "TASK" -> {
+                    case "TASK" :
                         manager.tasks.put(task.getId(), task);
                         countTasks++;
-                    }
-                    case "EPIC" -> {
+                    case "EPIC" :
                         Epic epic = epicFromString(lines.get(i));
                         manager.epics.put(epic.getId(), epic);
                         countTasks++;
-                    }
-                    case "SUBTASK" -> {
+                    case "SUBTASK" :
                         Subtask subtask = subtaskFromString(lines.get(i));
                         manager.subtasks.put(subtask.getId(), subtask);
                         manager.getEpicByIdNoHistory(subtask.getIdEpic()).setIds(subtask.getId());
                         countTasks++;
-                    }
-                    default -> System.out.println("Тип задачи не распознан");
+                    default :
+                        System.out.println("Тип задачи не распознан");
                 }
             }
             if (lines.size()-countTasks-noHistory > 0) {
