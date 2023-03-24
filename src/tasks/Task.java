@@ -1,6 +1,7 @@
 package tasks;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 public class Task {
@@ -79,8 +80,7 @@ public class Task {
         return type;
     }
     public Instant getEndTime() {
-        final int SECONDS_IN_MINUTE = 60;
-        return startTime.plusSeconds(duration*SECONDS_IN_MINUTE);
+        return startTime.plus(10, ChronoUnit.MINUTES);
     }
     @Override
     public boolean equals(Object o) {
