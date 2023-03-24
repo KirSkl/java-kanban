@@ -6,6 +6,7 @@ import tasks.Subtask;
 import tasks.Task;
 import static tasks.StatusOfTask.*;
 
+import java.time.Duration;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -210,7 +211,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
     @Override
     public void changeEpicTime(Epic epic) {
-        long duration = 0;
+        java.time.Duration duration = Duration.ZERO;
 
         for (int id : epic.getIds()) {
             Subtask subtask = subtasks.get(id);
@@ -220,7 +221,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (subtask.getEndTime().isAfter(epic.getEndTime())) {
                 epic.setEndTime(subtask.getEndTime());
             }
-            duration += subtask.getDuration();
+            duration = duration.plus(subtask.getDuration());
         }
         epic.setDuration(duration);
     }

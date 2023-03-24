@@ -2,6 +2,7 @@ package tasks;
 
 import manager.InMemoryTaskManager;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -10,15 +11,15 @@ public class Epic extends Task {
     private ArrayList<Integer> ids = new ArrayList<>();
 
 
-    private Instant endTime = startTime.plusSeconds(getDuration()*60);
+    private Instant endTime = startTime.plusSeconds(getDuration().toSeconds());
 
     public Epic(String title, String description, StatusOfTask status, TypeOfTask type, Instant startTime,
-                long duration) {
+                Duration duration) {
         super(title, description, status, type, startTime, duration);
         this.status = StatusOfTask.NEW;
     }
     public Epic(int id, String title, String description, StatusOfTask status, TypeOfTask type, Instant startTime,
-                long duration) {
+                Duration duration) {
         super(id, title, description, status, type, startTime, duration);
         this.status = StatusOfTask.NEW;
     }

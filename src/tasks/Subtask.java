@@ -2,6 +2,7 @@ package tasks;
 
 import manager.InMemoryTaskManager;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -9,12 +10,12 @@ public class Subtask extends Task {
     private int idEpic;
 
     public Subtask(String title, String description, StatusOfTask status, int idEpic, TypeOfTask type,
-                       Instant startTime, long duration) {
+                       Instant startTime, Duration duration) {
         super(title, description, status, type, startTime, duration);
         this.idEpic = idEpic;
     }
     public Subtask(int id, String title, String description, StatusOfTask status, int idEpic, TypeOfTask type,
-                       Instant startTime, long duration) {
+                       Instant startTime, Duration duration) {
         super(id, title, description, status, type, startTime, duration );
         this.idEpic = idEpic;
     }

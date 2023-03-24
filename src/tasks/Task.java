@@ -11,10 +11,10 @@ public class Task {
     protected StatusOfTask status;
     protected TypeOfTask type;
     protected Instant startTime;
-    protected java.time.Duration duration;
+    protected Duration duration;
 
     public Task(String title, String description, StatusOfTask status, TypeOfTask type, Instant startTime,
-                java.time.Duration duration) {
+                    Duration duration) {
         this.title = title;
         this.description = description;
         this.status = status;
@@ -23,7 +23,7 @@ public class Task {
         this.duration = duration;
     }
     public Task(int id, String title, String description, StatusOfTask status, TypeOfTask type, Instant startTime,
-                java.time.Duration duration) {
+                    Duration duration) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -39,7 +39,7 @@ public class Task {
         status = StatusOfTask.valueOf(lines[3]);
         description = lines[4];
         startTime = Instant.parse(lines[5]);
-        duration = java.time.Duration.parse(lines[6]);
+        duration = Duration.parse(lines[6]);
     }
     public int getId() {
         return id;

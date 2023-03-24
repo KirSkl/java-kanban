@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import static java.util.Collections.EMPTY_LIST;
@@ -21,12 +22,12 @@ public class InMemoryHistoryManagerTest {
     HistoryManager manager;
 
     final Task task = new tasks.Task(1,"Первая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH,
-            0);
+            Duration.ZERO);
     final Epic epic = new tasks.Epic(2,"Первый эпик", "обычный", NEW, EPIC, Instant.EPOCH,
-            0);
+            Duration.ZERO);
     Subtask newSubtask(Epic epic) {
         return new Subtask(3, "Первая подзадача", "Необычная", NEW,
-                epic.getId(), SUBTASK, Instant.EPOCH, 1);
+                epic.getId(), SUBTASK, Instant.EPOCH, Duration.ofMinutes(1));
     }
     @BeforeEach
     void createNewManager() {

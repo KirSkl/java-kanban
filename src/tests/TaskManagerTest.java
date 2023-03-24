@@ -9,6 +9,7 @@ import static tasks.TypeOfTask.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +18,18 @@ import static java.util.Collections.EMPTY_LIST;
 abstract class TaskManagerTest <T extends TaskManager> {
 
     T manager;
-    final Task task = new tasks.Task("Первая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH, 1);
-    final Task task1 = new tasks.Task("Вторая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH, 1);
+    final Task task = new tasks.Task("Первая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH,
+                                         Duration.ofMinutes(1));
+    final Task task1 = new tasks.Task("Вторая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH,
+                                         Duration.ofMinutes(1));
     final Task task2 = new tasks.Task("Третья задача", "ОБЫЧНАЯ", NEW, TASK,
-                                                    Instant.EPOCH.plusSeconds(100), 1);
-    final Epic epic = new tasks.Epic("Первый эпик", "обычный", NEW, EPIC, Instant.EPOCH, 0 );
-    final Epic epic1 = new tasks.Epic("Второй эпик", "обычный", NEW, EPIC, Instant.EPOCH, 0);
+                                                    Instant.EPOCH.plusSeconds(100), Duration.ofMinutes(1));
+    final Epic epic = new tasks.Epic("Первый эпик", "обычный", NEW, EPIC, Instant.EPOCH, Duration.ZERO );
+    final Epic epic1 = new tasks.Epic("Второй эпик", "обычный", NEW, EPIC, Instant.EPOCH,Duration.ZERO);
 
     Subtask newSubtask(Epic epic) {
         return new Subtask("Первая подзадача", "Необычная", NEW,
-                epic.getId(), SUBTASK, Instant.EPOCH, 1);
+                epic.getId(), SUBTASK, Instant.EPOCH, Duration.ofMinutes(1));
     }
     @Test
     void shouldReturnCorrectId() {
@@ -329,7 +332,7 @@ abstract class TaskManagerTest <T extends TaskManager> {
         subtask1.setStartTime(Instant.EPOCH.plusSeconds(1));
         manager.updateSubtask(subtask1);
 
-        assertEquals(subtask.getDuration()+subtask1.getDuration(), epic.getDuration());
+        assertEquals(subtask.getDuration().plus(subtask1.getDuration()), epic.getDuration());
         assertEquals(subtask.getStartTime(), epic.getStartTime());
         assertEquals(subtask1.getEndTime(), epic.getEndTime());
     }
@@ -338,14 +341,14 @@ abstract class TaskManagerTest <T extends TaskManager> {
         Task newTask = manager.createTask(task);
 
         assertEquals(Instant.EPOCH, newTask.getStartTime());
-        assertEquals(1, newTask.getDuration());
+        assertEquals(Duration.ofMinutes(1), newTask.getDuration());
         assertEquals(Instant.EPOCH.plusSeconds(60), newTask.getEndTime());
 
-        newTask.setDuration(2);
+        newTask.setDuration(Duration.ofMinutes(2));
         newTask.setStartTime(Instant.EPOCH.plusSeconds(1));
 
         assertEquals(Instant.EPOCH.plusSeconds(1), newTask.getStartTime());
-        assertEquals(2, newTask.getDuration());
+        assertEquals(Duration.ofMinutes(2), newTask.getDuration());
         assertEquals(Instant.EPOCH.plusSeconds(121), newTask.getEndTime());
     }
     @Test
