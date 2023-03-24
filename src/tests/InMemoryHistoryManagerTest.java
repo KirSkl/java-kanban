@@ -18,22 +18,22 @@ import static java.util.Collections.EMPTY_LIST;
 
 public class InMemoryHistoryManagerTest {
 
-    protected HistoryManager manager;
+    HistoryManager manager;
 
-    protected final Task task = new tasks.Task(1,"Первая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH,
+    final Task task = new tasks.Task(1,"Первая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH,
             0);
-    protected final Epic epic = new tasks.Epic(2,"Первый эпик", "обычный", NEW, EPIC, Instant.EPOCH,
+    final Epic epic = new tasks.Epic(2,"Первый эпик", "обычный", NEW, EPIC, Instant.EPOCH,
             0);
-    protected Subtask newSubtask(Epic epic) {
+    Subtask newSubtask(Epic epic) {
         return new Subtask(3, "Первая подзадача", "Необычная", NEW,
                 epic.getId(), SUBTASK, Instant.EPOCH, 1);
     }
     @BeforeEach
-    protected void createNewManager() {
+    void createNewManager() {
         manager = new InMemoryHistoryManager();
     }
     @Test
-    protected void addTest () {
+    void addTest () {
         manager.add(task);
         manager.add(epic);
         Subtask subtask  = newSubtask(epic);
@@ -42,7 +42,7 @@ public class InMemoryHistoryManagerTest {
         assertEquals(List.of(task, epic, subtask), manager.getHistory());
     }
     @Test
-    protected void removeTest() {
+    void removeTest() {
         manager.add(task);
         manager.add(epic);
         Subtask subtask  = newSubtask(epic);
@@ -71,7 +71,7 @@ public class InMemoryHistoryManagerTest {
         assertEquals(EMPTY_LIST, manager.getHistory());
     }
     @Test
-    protected void historyWithoutDuplicatesTest() {
+    void historyWithoutDuplicatesTest() {
         manager.add(task);
         manager.add(epic);
         Subtask subtask  = newSubtask(epic);
