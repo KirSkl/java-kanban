@@ -1,7 +1,7 @@
 package tasks;
 
+import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 public class Task {
@@ -11,10 +11,10 @@ public class Task {
     protected StatusOfTask status;
     protected TypeOfTask type;
     protected Instant startTime;
-    protected long duration;
+    protected java.time.Duration duration;
 
     public Task(String title, String description, StatusOfTask status, TypeOfTask type, Instant startTime,
-                long duration) {
+                java.time.Duration duration) {
         this.title = title;
         this.description = description;
         this.status = status;
@@ -23,7 +23,7 @@ public class Task {
         this.duration = duration;
     }
     public Task(int id, String title, String description, StatusOfTask status, TypeOfTask type, Instant startTime,
-                long duration) {
+                java.time.Duration duration) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -39,7 +39,7 @@ public class Task {
         status = StatusOfTask.valueOf(lines[3]);
         description = lines[4];
         startTime = Instant.parse(lines[5]);
-        duration = Long.parseLong(lines[6]);
+        duration = java.time.Duration.parse(lines[6]);
     }
     public int getId() {
         return id;
@@ -53,10 +53,10 @@ public class Task {
     public void setStartTime(Instant startTime) {
         this.startTime = startTime;
     }
-    public long getDuration() {
+    public Duration getDuration() {
         return duration;
     }
-    public void setDuration(long duration) {
+    public void setDuration(Duration duration) {
         this.duration = duration;
     }
 
@@ -80,7 +80,7 @@ public class Task {
         return type;
     }
     public Instant getEndTime() {
-        return startTime.plus(10, ChronoUnit.MINUTES);
+        return startTime.plusSeconds(duration.toSeconds());
     }
     @Override
     public boolean equals(Object o) {
