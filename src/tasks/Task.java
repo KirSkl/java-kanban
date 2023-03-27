@@ -41,6 +41,24 @@ public class Task {
         startTime = Instant.parse(lines[5]);
         duration = Duration.parse(lines[6]);
     }
+    public Task(Epic epic) {
+        this.id = epic.getId();
+        this.duration = epic.getDuration();
+        this.startTime = epic.getStartTime();
+        this.type = epic.getType();
+        this.status = epic.getStatus();
+        this.description = epic.getDescription();
+        this.title = epic.getTitle();
+    }
+    public Task(Subtask subtask) {
+        this.id = subtask.getId();
+        this.duration = subtask.getDuration();
+        this.startTime = subtask.getStartTime();
+        this.type = subtask.getType();
+        this.status = subtask.getStatus();
+        this.description = subtask.getDescription();
+        this.title = subtask.getTitle();
+    }
     public int getId() {
         return id;
     }
@@ -85,7 +103,7 @@ public class Task {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
+        if (!(o instanceof Task)) return false;
         Task object = (Task) o;
 
         return Objects.equals(this.title, object.title)
