@@ -5,9 +5,12 @@ import manager.FileBackedTasksManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
+import tasks.Task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import static java.util.Collections.EMPTY_LIST;
 
@@ -39,8 +42,11 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         assertEquals(List.of(subtask), manager.getAllSubtasks());
         assertEquals(List.of(newTask), manager.getAllTasks());
         assertEquals(List.of(newEpic), manager.getAllEpics());
-        System.out.println(Epic.class.getClassLoader());
-        assertEquals(List.of(newTask, newEpic, subtask), manager.getHistory());
+
+        Task newEpicToTask = new Task(newEpic); //сделал дополнительные конструкторы, потому что
+        Task subtaskToTask = new Task(subtask); // автоматическое приведение типов не работало
+
+        assertEquals(List.of(newTask, newEpicToTask, subtaskToTask), manager.getHistory());
         //эпик без подзадач
         manager.removeSubtaskById(subtask.getId());
         newEpic.clearIds();
