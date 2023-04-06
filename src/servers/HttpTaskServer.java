@@ -1,21 +1,32 @@
 package servers;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import manager.*;
+import tasks.Task;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.regex.Pattern;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static tasks.StatusOfTask.NEW;
+import static tasks.TypeOfTask.TASK;
 
 public class HttpTaskServer {
     private static final int PORT = 8080;
+    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final FileBackedTasksManager manager;
     private final HttpServer server;
     private final Gson gson;
+
 
     public HttpTaskServer() throws IOException {
         manager = Managers.getDefaultFileBackedTasksManager();
@@ -33,7 +44,8 @@ public class HttpTaskServer {
                 case "GET" :
                     if (Pattern.matches("^/tasks$", path)) {
                         System.out.println("Обработка запроса на получение приоритезированного списка задач...");
-                        manager.getPrioritizedTasks();
+                        var priorTasks = manager.getPrioritizedTasks();
+                        sendObject(httpExchange, priorTasks);
 
                     } else if (Pattern.matches("/tasks/hystory$", path)) {
                         System.out.println("Обработка запроса на получение истории...");
@@ -158,6 +170,9 @@ public class HttpTaskServer {
         HttpTaskServer httpTaskServer = new HttpTaskServer();
         httpTaskServer.start();
         //httpTaskServer.stop();
+        httpTaskServer.manager.createTask(new tasks.Task("Первая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH,
+                Duration.ofMinutes(1)));
+        httpTaskServer.manager.getTaskById(1);
     }
 
 
@@ -170,5 +185,9 @@ public class HttpTaskServer {
         h.getResponseHeaders().add("Content-Type", "application/json");
         h.sendResponseHeaders(200, resp.length);
         h.getResponseBody().write(resp);
+    }
+    protected void sendObject(HttpExchange h, Object object) throws IOException {
+        String jsonString = gson.toJson(object);
+        sendText(h, jsonString);
     }
 }
