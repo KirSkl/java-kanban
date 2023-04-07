@@ -15,9 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static tasks.StatusOfTask.*;
-import static tasks.TypeOfTask.*;
-
 public class FileBackedTasksManager extends InMemoryTaskManager {
     private static File file = new File("src/resources/defaultSave.csv");
 
