@@ -270,4 +270,7 @@ public class HttpTaskServer {
         }
         httpExchange.sendResponseHeaders(200, 0);
     }
+    public FileBackedTasksManager getManager() {
+        return manager;
+    }
 }
