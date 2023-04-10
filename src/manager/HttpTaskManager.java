@@ -3,6 +3,8 @@ package manager;
 import clients.KVTaskClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import tasks.Epic;
+import tasks.Subtask;
 import tasks.Task;
 
 import java.lang.reflect.Type;
@@ -39,16 +41,33 @@ public class HttpTaskManager extends FileBackedTasksManager {
         client.put("/tasks", priorTasks);
     }
     public void load() {
-        Type taskType = new TypeToken<HashMap <Integer, Task>>() {}.getType();
-        tasks = gson.fromJson(client.load("/tasks/task"), taskType);
+        var loadTasks = client.load("/tasks/task");
 
-        Type epicType = new TypeToken<HashMap <Integer, Task>>() {}.getType();
-        epics = gson.fromJson(client.load("/tasks/epic"), epicType);
+            Type taskType = new TypeToken<ArrayList<Task>>() {}.getType();
+            List<Task> tasksList = gson.fromJson(loadTasks, taskType);
+            for(Task task : tasksList) {
+                tasks.put(task.getId(), task);
+            }
 
-        Type subtaskType = new TypeToken<HashMap <Integer, Task>>() {}.getType();
-        subtasks = gson.fromJson(client.load("/tasks/subtask"), subtaskType);
 
-        Type historyType = new TypeToken<List <Task>>() {}.getType();
+        var loadEpics = client.load("/tasks/epic");
+
+            Type epicType = new TypeToken<List<Epic>>() {}.getType();
+            List<Epic> epicsList = gson.fromJson(loadEpics, epicType);
+            for (Epic epic : epicsList) {
+                epics.put(epic.getId(), epic);
+            }
+
+
+        var loadSubtasks = client.load("/tasks/subtask");
+
+            Type subtaskType = new TypeToken<List<Subtask>>() {}.getType();
+            List<Subtask> subtasksList = gson.fromJson(loadSubtasks, subtaskType);
+            for (Subtask subtask : subtasksList) {
+                subtasks.put(subtask.getId(), subtask);
+            }
+
+        Type historyType = new TypeToken<List<Task>>() {}.getType();
         ArrayList<Task> historyList = gson.fromJson(client.load("/tasks/history"), historyType);
         for (Task task: historyList) {
             history.add(task);
