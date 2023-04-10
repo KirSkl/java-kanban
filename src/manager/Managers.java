@@ -17,6 +17,9 @@ public class Managers {
     public static FileBackedTasksManager getDefaultFileBackedTasksManager() {
         return new FileBackedTasksManager();
     }
+    public static HttpTaskManager getHttpTaskManager() {
+        return new HttpTaskManager("http://localhost:8078");
+    }
     public static Gson getGson() {
         return new Gson();
     }
