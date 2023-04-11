@@ -1,10 +1,6 @@
 package manager;
 
-
-
 import com.google.gson.Gson;
-
-import java.io.File;
 
 public class Managers {
 
