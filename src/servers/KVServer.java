@@ -1,20 +1,14 @@
 package servers;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static tasks.StatusOfTask.NEW;
-import static tasks.TypeOfTask.TASK;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import clients.KVTaskClient;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
-import tasks.Task;
 
 /**
  * Постман: https://www.getpostman.com/collections/a83b61d9e1c81c10575c
@@ -96,7 +90,6 @@ public class KVServer {
 			h.close();
 		}
 	}
-
 	private void register(HttpExchange h) throws IOException {
 		try {
 			System.out.println("\n/register");
@@ -110,27 +103,22 @@ public class KVServer {
 			h.close();
 		}
 	}
-
 	public void start() {
 		System.out.println("Запускаем сервер на порту " + PORT);
 		System.out.println("Открой в браузере http://localhost:" + PORT + "/");
 		System.out.println("API_TOKEN: " + apiToken);
 		server.start();
 	}
-
 	private String generateApiToken() {
 		return "" + System.currentTimeMillis();
 	}
-
 	protected boolean hasAuth(HttpExchange h) {
 		String rawQuery = h.getRequestURI().getRawQuery();
 		return rawQuery != null && (rawQuery.contains("API_TOKEN=" + apiToken) || rawQuery.contains("API_TOKEN=DEBUG"));
 	}
-
 	protected String readText(HttpExchange h) throws IOException {
 		return new String(h.getRequestBody().readAllBytes(), UTF_8);
 	}
-
 	protected void sendText(HttpExchange h, String text) throws IOException {
 		byte[] resp = text.getBytes(UTF_8);
 		h.getResponseHeaders().add("Content-Type", "application/json");
@@ -140,6 +128,4 @@ public class KVServer {
 	public void stop() {
 		server.stop(0);
 	}
-
-
 }
