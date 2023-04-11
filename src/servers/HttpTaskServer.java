@@ -1,36 +1,28 @@
 package servers;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+
 import manager.*;
-import tasks.Epic;
-import tasks.Subtask;
-import tasks.Task;
+import tasks.*;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+
 import static tasks.StatusOfTask.NEW;
 import static tasks.TypeOfTask.TASK;
 
 public class HttpTaskServer {
     private static final int PORT = 8080;
-    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final FileBackedTasksManager manager;
     private final HttpServer server;
     private final Gson gson;
-
 
     public HttpTaskServer() throws IOException {
         manager = Managers.getDefaultFileBackedTasksManager();
@@ -38,16 +30,6 @@ public class HttpTaskServer {
         server.createContext("/tasks", this::handleTasks);
         gson = Managers.getGson();
     }
-
-    public static void main(String[] args) throws IOException {
-        HttpTaskServer httpTaskServer = new HttpTaskServer();
-        httpTaskServer.start();
-        //httpTaskServer.stop();
-        httpTaskServer.manager.createTask(
-                new tasks.Task("Первая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH, Duration.ofMinutes(1)));
-        httpTaskServer.manager.getTaskById(1);
-    }
-
     private void handleTasks(HttpExchange httpExchange) {
         try {
             String method = httpExchange.getRequestMethod();
@@ -171,7 +153,6 @@ public class HttpTaskServer {
             httpExchange.close();
         }
     }
-
     private int parseId(String id) {
         try {
             return Integer.parseInt(id);
@@ -180,37 +161,31 @@ public class HttpTaskServer {
             return -1;
         }
     }
-
     public void start() {
         System.out.println("Запускаем сервер на порту " + PORT);
         System.out.println("Открой в браузере http://localhost:" + PORT + "/");
         server.start();
     }
-
     public void stop() {
         server.stop(0);
         System.out.println("HTTP-сервер остановлен на " + PORT + " порту.");
     }
-
     protected String readText(HttpExchange h) throws IOException {
         return new String(h.getRequestBody().readAllBytes(), UTF_8);
     }
-
     protected void sendText(HttpExchange h, String text) throws IOException {
         byte[] resp = text.getBytes(UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json");
         h.sendResponseHeaders(200, resp.length);
         h.getResponseBody().write(resp);
     }
-
     protected void sendObject(HttpExchange h, Object object) throws IOException {
         String jsonString = gson.toJson(object);
         sendText(h, jsonString);
     }
-
     protected void createOrUpdateTask(HttpExchange httpExchange) throws IOException {
         var inputStream = httpExchange.getRequestBody();
-        String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
+        String body = new String(inputStream.readAllBytes(), UTF_8);
         Task task = gson.fromJson(body, Task.class);
         boolean isExist = false;
         for (Task oldTask : manager.getAllTasks()) {
@@ -228,10 +203,9 @@ public class HttpTaskServer {
         }
         httpExchange.sendResponseHeaders(200, 0);
     }
-
     protected void createOrUpdateEpic(HttpExchange httpExchange) throws IOException {
         var inputStream = httpExchange.getRequestBody();
-        String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
+        String body = new String(inputStream.readAllBytes(), UTF_8);
         Epic epic = gson.fromJson(body, Epic.class);
         boolean isExist = false;
         for (Epic oldEpic : manager.getAllEpics()) {
@@ -249,10 +223,9 @@ public class HttpTaskServer {
         }
         httpExchange.sendResponseHeaders(200, 0);
     }
-
     protected void createOrUpdateSubtask(HttpExchange httpExchange) throws IOException {
         var inputStream = httpExchange.getRequestBody();
-        String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
+        String body = new String(inputStream.readAllBytes(), UTF_8);
         Subtask subtask = gson.fromJson(body, Subtask.class);
         boolean isExist = false;
         for (Subtask oldSubtask : manager.getAllSubtasks()) {
@@ -272,5 +245,15 @@ public class HttpTaskServer {
     }
     public FileBackedTasksManager getManager() {
         return manager;
+    }
+
+    public static void main(String[] args) throws IOException {
+        //ТЕСТЫ
+        HttpTaskServer httpTaskServer = new HttpTaskServer();
+        httpTaskServer.start();
+        //httpTaskServer.stop();
+        httpTaskServer.manager.createTask(
+                new tasks.Task("Первая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH, Duration.ofMinutes(1)));
+        httpTaskServer.manager.getTaskById(1);
     }
 }
