@@ -2,15 +2,15 @@ package tests;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sun.net.httpserver.HttpServer;
-import manager.InMemoryTaskManager;
+
 import manager.Managers;
 import manager.TaskManager;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import servers.HttpTaskServer;
-import servers.KVServer;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -20,22 +20,21 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import static java.util.Collections.EMPTY_LIST;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+
 import static tasks.StatusOfTask.NEW;
 import static tasks.TypeOfTask.*;
 
 public class HttpTaskServerTest {
-    HttpClient client;
-    TaskManager manager;
-    HttpTaskServer server;
-    Gson gson;
+    private HttpClient client;
+    private TaskManager manager;
+    private HttpTaskServer server;
+    private Gson gson;
 
     final Task task = new tasks.Task("Первая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH,
             Duration.ofMinutes(1));
@@ -62,7 +61,6 @@ public class HttpTaskServerTest {
     @Test
     void shouldCreateTask() throws IOException, InterruptedException {
         Task newTask = manager.createTask(task);
-
         String jsonNewTask = gson.toJson(newTask);
         var body = HttpRequest.BodyPublishers.ofString(jsonNewTask);
         URI url = URI.create("http://localhost:8080/tasks/task");
@@ -71,12 +69,12 @@ public class HttpTaskServerTest {
                 .POST(body)
                 .build();
         var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
         assertEquals(200, response.statusCode());
     }
     @Test
     void shouldCreateEpicAndSubtask() throws IOException, InterruptedException {
         Epic newEpic = manager.createEpic(epic);
-
         String jsonNewEpic = gson.toJson(newEpic);
         var body = HttpRequest.BodyPublishers.ofString(jsonNewEpic);
         URI url = URI.create("http://localhost:8080/tasks/epic");
@@ -89,7 +87,6 @@ public class HttpTaskServerTest {
         assertEquals(200, response.statusCode());
 
         Subtask subtask = manager.createSubtask(newSubtask(newEpic));
-
         String jsonNewSubtask = gson.toJson(subtask);
         body = HttpRequest.BodyPublishers.ofString(jsonNewSubtask);
         url = URI.create("http://localhost:8080/tasks/subtask");
@@ -122,7 +119,6 @@ public class HttpTaskServerTest {
         Task newTask = manager.createTask(task);
         String jsonNewTask = gson.toJson(newTask1);
         var body = HttpRequest.BodyPublishers.ofString(jsonNewTask);
-
         URI url = URI.create("http://localhost:8080/tasks/task");
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
@@ -132,7 +128,6 @@ public class HttpTaskServerTest {
 
         jsonNewTask = gson.toJson(newTask);
         body = HttpRequest.BodyPublishers.ofString(jsonNewTask);
-
         request = HttpRequest.newBuilder()
                 .uri(url)
                 .POST(body)
@@ -144,8 +139,8 @@ public class HttpTaskServerTest {
                 .uri(url)
                 .GET()
                 .build();
-
         var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
         assertEquals(200, response.statusCode());
 
         var type = new TypeToken<List<Task>>(){}.getType();
@@ -153,12 +148,12 @@ public class HttpTaskServerTest {
 
         assertEquals(List.of(newTask, newTask1), priorTasks);
     }
+    @Test
     void shouldReturnAllTasks() throws IOException, InterruptedException {
         Task newTask1 = manager.createTask(task1);
         Task newTask = manager.createTask(task);
         String jsonNewTask = gson.toJson(newTask1);
         var body = HttpRequest.BodyPublishers.ofString(jsonNewTask);
-
         URI url = URI.create("http://localhost:8080/tasks/task");
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
@@ -168,7 +163,6 @@ public class HttpTaskServerTest {
 
         jsonNewTask = gson.toJson(newTask);
         body = HttpRequest.BodyPublishers.ofString(jsonNewTask);
-
         request = HttpRequest.newBuilder()
                 .uri(url)
                 .POST(body)
@@ -185,9 +179,9 @@ public class HttpTaskServerTest {
 
         assertEquals(List.of(newTask1, newTask), tasks);
     }
+    @Test
     void shouldReturnAllEpicsAnsSubtasks() throws IOException, InterruptedException {
         Epic newEpic = manager.createEpic(epic);
-
         String jsonNewEpic = gson.toJson(newEpic);
         var body = HttpRequest.BodyPublishers.ofString(jsonNewEpic);
         URI url = URI.create("http://localhost:8080/tasks/epic");
@@ -227,11 +221,11 @@ public class HttpTaskServerTest {
 
         assertEquals(List.of(subtask), subtasks);
     }
+    @Test
     void shouldReturnTaskAndHistory() throws IOException, InterruptedException {
         Task newTask = manager.createTask(task);
         String jsonNewTask = gson.toJson(newTask);
         var body = HttpRequest.BodyPublishers.ofString(jsonNewTask);
-
         URI url = URI.create("http://localhost:8080/tasks/task");
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
@@ -257,13 +251,13 @@ public class HttpTaskServerTest {
                 .build();
         response = client.send(request, HttpResponse.BodyHandlers.ofString());
         type = new TypeToken<List<Task>>(){}.getType();
-        Task history = gson.fromJson(response.body(), type);
+        List<Task> history = gson.fromJson(response.body(), type);
 
         assertEquals(List.of(newTask), history);
     }
+    @Test
     void shouldReturnEpicAndSubtask() throws IOException, InterruptedException {
         Epic newEpic = manager.createEpic(epic);
-
         String jsonNewEpic = gson.toJson(newEpic);
         var body = HttpRequest.BodyPublishers.ofString(jsonNewEpic);
         URI url = URI.create("http://localhost:8080/tasks/epic");
@@ -303,7 +297,7 @@ public class HttpTaskServerTest {
         type = new TypeToken<Subtask>(){}.getType();
         Subtask returnedSubtask = gson.fromJson(response.body(), type);
 
-        assertEquals(List.of(subtask), returnedSubtask);
+        assertEquals(subtask, returnedSubtask);
     }
     @Test
     void shouldDeleteTasks() throws IOException, InterruptedException {
@@ -311,7 +305,6 @@ public class HttpTaskServerTest {
         Task newTask = manager.createTask(task);
         String jsonNewTask = gson.toJson(newTask1);
         var body = HttpRequest.BodyPublishers.ofString(jsonNewTask);
-
         URI url = URI.create("http://localhost:8080/tasks/task");
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
@@ -321,7 +314,6 @@ public class HttpTaskServerTest {
 
         jsonNewTask = gson.toJson(newTask);
         body = HttpRequest.BodyPublishers.ofString(jsonNewTask);
-
         request = HttpRequest.newBuilder()
                 .uri(url)
                 .POST(body)
@@ -346,7 +338,6 @@ public class HttpTaskServerTest {
         var type = new TypeToken<List<Task>>(){}.getType();
         List<Task> responseTasks = gson.fromJson(response.body(), type);
 
-
         assertEquals(List.of(newTask), responseTasks);
 
         url = URI.create("http://localhost:8080/tasks/task");
@@ -367,7 +358,6 @@ public class HttpTaskServerTest {
         type = new TypeToken<List<Task>>(){}.getType();
         List<Task> responseEmptyTasks = gson.fromJson(response.body(), type);
 
-
         assertEquals(EMPTY_LIST, responseEmptyTasks);
     }
     @Test
@@ -376,7 +366,6 @@ public class HttpTaskServerTest {
         Epic newEpic1 = manager.createEpic(epic1);
         String jsonNewEpic = gson.toJson(newEpic);
         var body = HttpRequest.BodyPublishers.ofString(jsonNewEpic);
-
         URI url = URI.create("http://localhost:8080/tasks/epic");
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
@@ -386,7 +375,6 @@ public class HttpTaskServerTest {
 
         jsonNewEpic = gson.toJson(newEpic1);
         body = HttpRequest.BodyPublishers.ofString(jsonNewEpic);
-
         request = HttpRequest.newBuilder()
                 .uri(url)
                 .POST(body)
@@ -431,17 +419,13 @@ public class HttpTaskServerTest {
         type = new TypeToken<List<Epic>>(){}.getType();
         List<Epic> responseEmptyEpics = gson.fromJson(response.body(), type);
 
-
         assertEquals(EMPTY_LIST, responseEmptyEpics);
-
-
     }
     @Test
     void shouldDeleteSubtasks() throws IOException, InterruptedException {
         Epic newEpic = manager.createEpic(epic);
         String jsonNewEpic = gson.toJson(newEpic);
         var body = HttpRequest.BodyPublishers.ofString(jsonNewEpic);
-
         URI url = URI.create("http://localhost:8080/tasks/epic");
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
@@ -453,10 +437,8 @@ public class HttpTaskServerTest {
         Subtask newSubtask = manager.createSubtask(subtask);
         Subtask subtask1 = newSubtask(newEpic);
         Subtask newSubtask1 = manager.createSubtask(subtask1);
-
         String jsonNewSubtask = gson.toJson(newSubtask);
         body = HttpRequest.BodyPublishers.ofString(jsonNewSubtask);
-
         url = URI.create("http://localhost:8080/tasks/subtask");
         request = HttpRequest.newBuilder()
                 .uri(url)
@@ -466,7 +448,6 @@ public class HttpTaskServerTest {
 
         jsonNewSubtask = gson.toJson(newSubtask1);
         body = HttpRequest.BodyPublishers.ofString(jsonNewSubtask);
-
         request = HttpRequest.newBuilder()
                 .uri(url)
                 .POST(body)
@@ -515,11 +496,10 @@ public class HttpTaskServerTest {
 
     }
     @Test
-    void shouldReturnSubtasksofEpic() throws IOException, InterruptedException {
+    void shouldReturnSubtasksOfEpic() throws IOException, InterruptedException {
         Epic newEpic = manager.createEpic(epic);
         String jsonNewEpic = gson.toJson(newEpic);
         var body = HttpRequest.BodyPublishers.ofString(jsonNewEpic);
-
         URI url = URI.create("http://localhost:8080/tasks/epic");
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
@@ -531,7 +511,6 @@ public class HttpTaskServerTest {
         Subtask newSubtask = manager.createSubtask(subtask);
         Subtask subtask1 = newSubtask(newEpic);
         Subtask newSubtask1 = manager.createSubtask(subtask1);
-
         String jsonNewSubtask = gson.toJson(newSubtask);
         body = HttpRequest.BodyPublishers.ofString(jsonNewSubtask);
 
@@ -544,7 +523,6 @@ public class HttpTaskServerTest {
 
         jsonNewSubtask = gson.toJson(newSubtask1);
         body = HttpRequest.BodyPublishers.ofString(jsonNewSubtask);
-
         request = HttpRequest.newBuilder()
                 .uri(url)
                 .POST(body)
