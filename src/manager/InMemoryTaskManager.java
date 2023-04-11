@@ -41,7 +41,6 @@ public class InMemoryTaskManager implements TaskManager {
         return new ArrayList<>(subtasks.values());
     }
     @Override
-    // методы для удаления
     public void deleteAllTasks() {
         for (int id : tasks.keySet()) {
             history.remove(id);
@@ -73,7 +72,6 @@ public class InMemoryTaskManager implements TaskManager {
         epics.clear();
         subtasks.clear();
     }
-    //методы для получения по айди
     @Override
     public Task getTaskById(int id) {
         try {
@@ -146,7 +144,6 @@ public class InMemoryTaskManager implements TaskManager {
         subtasks.remove(id);
         prioritizedTasks.removeIf(t -> t.getId() == id);
     }
-    //методы по созданию задач
     @Override
     public Task createTask(Task task) {
         task.setId(getId());
