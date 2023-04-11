@@ -58,7 +58,7 @@ public class HttpTaskServer {
                     if (Pattern.matches("^/tasks$", path)) {
                         System.out.println("Обработка запроса на получение приоритизированного списка задач...");
                         sendObject(httpExchange, manager.getPrioritizedTasks());
-                    } else if (Pattern.matches("/tasks/hystory$", path)) {
+                    } else if (Pattern.matches("/tasks/history$", path)) {
                         System.out.println("Обработка запроса на получение истории...");
                         sendObject(httpExchange, manager.getHistory());
                     } else if (params == null) {
@@ -110,7 +110,7 @@ public class HttpTaskServer {
                         createOrUpdateTask(httpExchange);
                     } else if (Pattern.matches("/tasks/subtask", path)) {
                         createOrUpdateSubtask(httpExchange);
-                    } else if (Pattern.matches("tasks/epic", path)) {
+                    } else if (Pattern.matches("/tasks/epic", path)) {
                         createOrUpdateEpic(httpExchange);
                     } else {
                         System.out.println("Указан неверный путь для запроса.");
@@ -234,17 +234,17 @@ public class HttpTaskServer {
         String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
         Epic epic = gson.fromJson(body, Epic.class);
         boolean isExist = false;
-        for (Task oldEpic : manager.getAllTasks()) {
+        for (Epic oldEpic : manager.getAllEpics()) {
             if (epic.getId() == oldEpic.getId()) {
                 isExist = true;
                 break;
             }
         }
         if (!isExist) {
-            manager.createTask(epic);
+            manager.createEpic(epic);
             System.out.println("Эпик создан");
         } else {
-            manager.updateTask(epic);
+            manager.updateEpic(epic);
             System.out.println("Эпик обновлен");
         }
         httpExchange.sendResponseHeaders(200, 0);
@@ -255,17 +255,17 @@ public class HttpTaskServer {
         String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
         Subtask subtask = gson.fromJson(body, Subtask.class);
         boolean isExist = false;
-        for (Task oldSubtask : manager.getAllTasks()) {
+        for (Subtask oldSubtask : manager.getAllSubtasks()) {
             if (subtask.getId() == oldSubtask.getId()) {
                 isExist = true;
                 break;
             }
         }
         if (!isExist) {
-            manager.createTask(subtask);
+            manager.createSubtask(subtask);
             System.out.println("Подзадача создана");
         } else {
-            manager.updateTask(subtask);
+            manager.updateSubtask(subtask);
             System.out.println("Подзадача обновлена");
         }
         httpExchange.sendResponseHeaders(200, 0);
