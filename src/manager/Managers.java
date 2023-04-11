@@ -20,6 +20,9 @@ public class Managers {
     public static HttpTaskManager getHttpTaskManager() {
         return new HttpTaskManager("http://localhost:8078");
     }
+    public static InMemoryTaskManager getInMemoryTaskManager() {
+        return new InMemoryTaskManager();
+    }
     public static Gson getGson() {
         return new Gson();
     }
