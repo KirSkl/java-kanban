@@ -1,7 +1,5 @@
 package tasks;
 
-import manager.InMemoryTaskManager;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -9,8 +7,6 @@ import java.util.Objects;
 
 public class Epic extends Task {
     private ArrayList<Integer> ids = new ArrayList<>();
-
-
     private Instant endTime = startTime.plusSeconds(getDuration().toSeconds());
 
     public Epic(String title, String description, StatusOfTask status, TypeOfTask type, Instant startTime,
