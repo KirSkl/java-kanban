@@ -24,7 +24,7 @@ import static tasks.TypeOfTask.*;
 public class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
     private KVServer kvServer;
     @BeforeEach
-     void startServer() throws IOException {
+     void startServer() throws IOException, InterruptedException {
         kvServer = new KVServer();
         kvServer.start();
         manager = Managers.getHttpTaskManager();
@@ -34,7 +34,7 @@ public class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
         kvServer.stop();
     }
     @Test
-    void saveAndLoadTest() {
+    void saveAndLoadTest() throws IOException, InterruptedException {
         HttpTaskManager manager = Managers.getHttpTaskManager();
         manager.save(); //пустой список задач и пустая история
         manager.load();

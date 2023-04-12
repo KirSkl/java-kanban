@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Set;
 
 public class HttpTaskManager extends FileBackedTasksManager {
-    private String url;
-    private KVTaskClient client;
-    private Gson gson;
+    private static String url;
+    private static KVTaskClient client;
+    private static Gson gson;
 
     public HttpTaskManager(String url) throws IOException, InterruptedException {
         this.url = url;
@@ -41,35 +41,36 @@ public class HttpTaskManager extends FileBackedTasksManager {
         var priorTasks = gson.toJson(getPrioritizedTasks());
         client.put("/tasks", priorTasks);
     }
-    public void load() {
+    public static void load() throws IOException, InterruptedException {
+        HttpTaskManager httpTaskManager = new HttpTaskManager(url);
         var loadTasks = client.load("/tasks/task");
         Type taskType = new TypeToken<ArrayList<Task>>() {}.getType();
         List<Task> tasksList = gson.fromJson(loadTasks, taskType);
         for(Task task : tasksList) {
-            tasks.put(task.getId(), task);
+            httpTaskManager.tasks.put(task.getId(), task);
         }
 
         var loadEpics = client.load("/tasks/epic");
         Type epicType = new TypeToken<List<Epic>>() {}.getType();
         List<Epic> epicsList = gson.fromJson(loadEpics, epicType);
         for (Epic epic : epicsList) {
-            epics.put(epic.getId(), epic);
+            httpTaskManager.epics.put(epic.getId(), epic);
         }
 
         var loadSubtasks = client.load("/tasks/subtask");
         Type subtaskType = new TypeToken<List<Subtask>>() {}.getType();
         List<Subtask> subtasksList = gson.fromJson(loadSubtasks, subtaskType);
         for (Subtask subtask : subtasksList) {
-            subtasks.put(subtask.getId(), subtask);
+            httpTaskManager.subtasks.put(subtask.getId(), subtask);
         }
 
         Type historyType = new TypeToken<List<Task>>() {}.getType();
         ArrayList<Task> historyList = gson.fromJson(client.load("/tasks/history"), historyType);
         for (Task task: historyList) {
-            history.add(task);
+            httpTaskManager.history.add(task);
         }
 
         Type priorTaskType = new TypeToken<Set<Task>>() {}.getType();
-        prioritizedTasks = gson.fromJson(client.load("/tasks"), priorTaskType);
+        httpTaskManager.prioritizedTasks = gson.fromJson(client.load("/tasks"), priorTaskType);
     }
 }
