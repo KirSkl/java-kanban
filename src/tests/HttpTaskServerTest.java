@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import servers.HttpTaskServer;
+import servers.KVServer;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -35,6 +36,7 @@ public class HttpTaskServerTest {
     private TaskManager manager;
     private HttpTaskServer server;
     private Gson gson;
+    private KVServer kvServer;
 
     final Task task = new tasks.Task("Первая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH,
             Duration.ofMinutes(1));
@@ -47,16 +49,19 @@ public class HttpTaskServerTest {
                 epic.getId(), SUBTASK, Instant.EPOCH, Duration.ofMinutes(1));
     }
     @BeforeEach
-    void startServer() throws IOException {
+    void startServer() throws IOException, InterruptedException {
+        kvServer = new KVServer();
+        kvServer.start();
         server = new HttpTaskServer();
         server.start();
-        manager = Managers.getInMemoryTaskManager();
+        manager = Managers.getDefault();
         client = HttpClient.newHttpClient();
         gson = Managers.getGson();
     }
     @AfterEach
     void closeServer() {
         server.stop();
+        kvServer.stop();
     }
     @Test
     void shouldCreateTask() throws IOException, InterruptedException {
