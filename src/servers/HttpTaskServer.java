@@ -243,9 +243,6 @@ public class HttpTaskServer {
         }
         httpExchange.sendResponseHeaders(200, 0);
     }
-    /*public TaskManager getManager() {
-        return manager;
-    }*/
 
     public static void main(String[] args) throws IOException, InterruptedException {
         //ТЕСТЫ
