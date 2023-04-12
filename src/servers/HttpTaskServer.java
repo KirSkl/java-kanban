@@ -20,12 +20,12 @@ import static tasks.TypeOfTask.TASK;
 
 public class HttpTaskServer {
     private static final int PORT = 8080;
-    private final FileBackedTasksManager manager;
+    private final TaskManager manager;
     private final HttpServer server;
     private final Gson gson;
 
-    public HttpTaskServer() throws IOException {
-        manager = Managers.getDefaultFileBackedTasksManager();
+    public HttpTaskServer() throws IOException, InterruptedException {
+        manager = Managers.getDefault();
         server = HttpServer.create(new InetSocketAddress(PORT), 0);
         server.createContext("/tasks", this::handleTasks);
         gson = Managers.getGson();
@@ -243,15 +243,14 @@ public class HttpTaskServer {
         }
         httpExchange.sendResponseHeaders(200, 0);
     }
-    public FileBackedTasksManager getManager() {
+    /*public TaskManager getManager() {
         return manager;
-    }
+    }*/
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         //ТЕСТЫ
         HttpTaskServer httpTaskServer = new HttpTaskServer();
         httpTaskServer.start();
-        //httpTaskServer.stop();
         httpTaskServer.manager.createTask(
                 new tasks.Task("Первая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH, Duration.ofMinutes(1)));
         httpTaskServer.manager.getTaskById(1);
