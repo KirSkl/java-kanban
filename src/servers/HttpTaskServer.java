@@ -57,26 +57,49 @@ public class HttpTaskServer {
                             System.out.println("Указан неверный путь для запроса");
                             httpExchange.sendResponseHeaders(405, 0);
                         }
+                        switch (path) {
+                            case "/tasks/task" :
+                            System.out.println("Обработка запроса на получение списка всех задач...");
+                            sendObject(httpExchange, manager.getAllTasks());
+                            break;
+                            case "/tasks/epic" :
+                            System.out.println("Обработка запроса на получение списка всех эпиков...");
+                            sendObject(httpExchange, manager.getAllEpics());
+                            break;
+                            case "/tasks/subtask" :
+                            System.out.println("Обработка запроса на получение списка всех подзадач...");
+                            sendObject(httpExchange, manager.getAllSubtasks());
+                            break;
+                            default:
+                            System.out.println("Указан неверный путь для запроса");
+                            httpExchange.sendResponseHeaders(405, 0);
+                        }
                     } else if (Pattern.matches("id=\\d+$", params)) {
                         String paramsId = params.replaceFirst("id=", "");
                         int id = parseId(paramsId);
                         if (id != -1) {
-                            if (Pattern.matches("^/tasks/task/$", path)) {
-                                System.out.println("Обработка запроса получения задачи по ID=" + id + "...");
-                                sendObject(httpExchange, manager.getTaskById(id));
-                            } else if (Pattern.matches("^/tasks/epic/$", path)) {
-                                System.out.println("Обработка запроса получения эпика по ID=" + id + "...");
-                                sendObject(httpExchange, manager.getEpicById(id));
-                            } else if (Pattern.matches("^/tasks/subtask/$", path)) {
-                                System.out.println("Обработка запроса получения подзадачи по ID=" + id + "...");
-                                sendObject(httpExchange, manager.getSubtaskById(id));
-                                return;
-                            } else if (Pattern.matches("^/tasks/subtask/epic/$", path)) {
-                                System.out.println("Обработка запроса получения подзадач эпика по ID=" + id + "...");
-                                sendObject(httpExchange, manager.getSubtasksOfEpic(manager.getEpicByIdNoHistory(id)));
-                            } else {
-                                System.out.println("Указан неверный путь для запроса");
-                                httpExchange.sendResponseHeaders(405, 0);
+                            switch (path) {
+                                case "/tasks/task/":
+                                    System.out.println("Обработка запроса получения задачи по ID=" + id + "...");
+                                    sendObject(httpExchange, manager.getTaskById(id));
+                                    break;
+                                case "/tasks/epic/":
+                                    System.out.println("Обработка запроса получения эпика по ID=" + id + "...");
+                                    sendObject(httpExchange, manager.getEpicById(id));
+                                    break;
+                                case "/tasks/subtask/":
+                                    System.out.println("Обработка запроса получения подзадачи по ID=" + id + "...");
+                                    sendObject(httpExchange, manager.getSubtaskById(id));
+                                    break;
+                                case "/tasks/subtask/epic/" :
+                                    System.out.println(
+                                            "Обработка запроса получения подзадач эпика по ID=" + id + "...");
+                                    sendObject(httpExchange,
+                                            manager.getSubtasksOfEpic(manager.getEpicByIdNoHistory(id)));
+                                    break;
+                                default:
+                                    System.out.println("Указан неверный путь для запроса");
+                                    httpExchange.sendResponseHeaders(405, 0);
                             }
                         } else {
                             System.out.println("Получен некорректный ID");
@@ -88,49 +111,64 @@ public class HttpTaskServer {
                     }
                     break;
                 case "POST":
-                    if (Pattern.matches("/tasks/task", path)) {
-                        createOrUpdateTask(httpExchange);
-                    } else if (Pattern.matches("/tasks/subtask", path)) {
-                        createOrUpdateSubtask(httpExchange);
-                    } else if (Pattern.matches("/tasks/epic", path)) {
-                        createOrUpdateEpic(httpExchange);
-                    } else {
-                        System.out.println("Указан неверный путь для запроса.");
-                        httpExchange.sendResponseHeaders(405, 0);
+                    switch (path) {
+                        case "/tasks/task" :
+                            createOrUpdateTask(httpExchange);
+                            break;
+                        case "/tasks/subtask" :
+                            createOrUpdateSubtask(httpExchange);
+                            break;
+                        case "/tasks/epic" :
+                            createOrUpdateEpic(httpExchange);
+                            break;
+                        default:
+                            System.out.println("Указан неверный путь для запроса.");
+                            httpExchange.sendResponseHeaders(405, 0);
                     }
                     break;
                 case "DELETE":
                     if (params == null) {
-                        if (Pattern.matches("^/tasks/task$", path)) {
-                            System.out.println("Обработка запроса на удаление списка всех задач...");
-                            manager.deleteAllTasks();
-                            httpExchange.sendResponseHeaders(200, 0);
-                        } else if (Pattern.matches("^/tasks/epic$", path)) {
-                            System.out.println("Обработка запроса на удаление списка всех эпиков...");
-                            manager.deleteAllEpics();
-                            httpExchange.sendResponseHeaders(200, 0);
-                        } else if (Pattern.matches("^/tasks/subtask$", path)) {
-                            System.out.println("Обработка запроса на удаление списка всех подзадач...");
-                            manager.deleteAllSubtasks();
-                            httpExchange.sendResponseHeaders(200, 0);
+                        switch (path) {
+                            case "/tasks/task" :
+                                System.out.println("Обработка запроса на удаление списка всех задач...");
+                                manager.deleteAllTasks();
+                                httpExchange.sendResponseHeaders(200, 0);
+                                break;
+                            case "/tasks/epic" :
+                                System.out.println("Обработка запроса на удаление списка всех эпиков...");
+                                manager.deleteAllEpics();
+                                httpExchange.sendResponseHeaders(200, 0);
+                                break;
+                            case "/tasks/subtask" :
+                                System.out.println("Обработка запроса на удаление списка всех подзадач...");
+                                manager.deleteAllSubtasks();
+                                httpExchange.sendResponseHeaders(200, 0);
+                                break;
+                            default :
+                                System.out.println("Указан неверный путь для запроса.");
+                                httpExchange.sendResponseHeaders(405, 0);
                         }
                     } else if (Pattern.matches("id=\\d+$", params)) {
                         String paramsId = params.replaceFirst("id=", "");
                         int id = parseId(paramsId);
                         if (id != -1) {
-                            if (Pattern.matches("^/tasks/task/$", path)) {
-                                System.out.println("Обработка запроса удаления задачи по ID=" + id + "...");
-                                manager.removeTaskById(id);
-                                httpExchange.sendResponseHeaders(200, 0);
-                            } else if (Pattern.matches("^/tasks/epic/$", path)) {
-                                System.out.println("Обработка запроса удаления эпика по ID=" + id + "...");
-                                manager.removeEpicById(id);
-                                httpExchange.sendResponseHeaders(200, 0);
-                            } else if (Pattern.matches("^/tasks/subtask/$", path)) {
-                                System.out.println("Обработка запроса удаления подзадачи по ID=" + id + "...");
-                                manager.removeSubtaskById(id);
-                                httpExchange.sendResponseHeaders(200, 0);
-                            } else {
+                            switch (path) {
+                                case "/tasks/task/" :
+                                    System.out.println("Обработка запроса удаления задачи по ID=" + id + "...");
+                                    manager.removeTaskById(id);
+                                    httpExchange.sendResponseHeaders(200, 0);
+                                    break;
+                                case "/tasks/epic/":
+                                    System.out.println("Обработка запроса удаления эпика по ID=" + id + "...");
+                                    manager.removeEpicById(id);
+                                    httpExchange.sendResponseHeaders(200, 0);
+                                    break;
+                                case "/tasks/subtask/":
+                                    System.out.println("Обработка запроса удаления подзадачи по ID=" + id + "...");
+                                    manager.removeSubtaskById(id);
+                                    httpExchange.sendResponseHeaders(200, 0);
+                                    break;
+                                default :
                                 System.out.println("Указан неверный путь для запроса");
                                 httpExchange.sendResponseHeaders(405, 0);
                             }
