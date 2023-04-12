@@ -35,6 +35,7 @@ public class KVTaskClient {
         HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
         token = (httpClient.send(request, handler)).body();
     }
+
     public void put(String key, String json) {
         URI uri = URI.create(url + "/save/" + key + "/?API_TOKEN=" + token);
         HttpRequest request = HttpRequest.newBuilder()
@@ -47,6 +48,7 @@ public class KVTaskClient {
             System.out.println("Сохранение завершно с ошибкой: " + e.getMessage());
         }
     }
+
     public String load(String key) {
         URI uri = URI.create(url + "/load/" + key + "/?API_TOKEN=" + token);
         HttpRequest request = HttpRequest.newBuilder()
@@ -61,30 +63,5 @@ public class KVTaskClient {
             System.out.println("Ошибка при получении значения: " + e.getMessage());
         }
         return response;
-    }
-    public static void main(String[] args) throws IOException, InterruptedException {
-        new KVServer().start();
-        KVTaskClient client = new KVTaskClient("http://localhost:8078");
-        HttpTaskServer httpTaskServer = new HttpTaskServer();
-        Task task = httpTaskServer.getManager().createTask(
-                new tasks.Task("Первая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH,
-                        Duration.ofMinutes(1)));
-        Gson gson = Managers.getGson();
-        String json = gson.toJson(task);
-        client.put("1", json);
-
-        String json1 = client.load("1");
-        Task task1 = gson.fromJson(json1, Task.class);
-        System.out.println(task.equals(task1));
-
-        Task task2 = httpTaskServer.getManager().createTask(
-                new tasks.Task("Вторая задача", "ОБЫЧНАЯ", NEW, TASK, Instant.EPOCH,
-                        Duration.ofMinutes(1)));
-        String json2 = gson.toJson(task2);
-        client.put("1", json2);
-
-        String json3 = client.load("1");
-        Task task3 = gson.fromJson(json3, Task.class);
-        System.out.println(task2.equals(task3));
     }
 }
