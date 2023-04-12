@@ -8,6 +8,7 @@ import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
     private KVTaskClient client;
     private Gson gson;
 
-    public HttpTaskManager(String url) {
+    public HttpTaskManager(String url) throws IOException, InterruptedException {
         this.url = url;
         client = new KVTaskClient(url);
         gson = Managers.getGson();

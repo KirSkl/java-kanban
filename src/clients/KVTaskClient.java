@@ -24,7 +24,7 @@ public class KVTaskClient {
     private HttpClient httpClient;
     private String url;
 
-    public KVTaskClient(String url) {
+    public KVTaskClient(String url) throws InterruptedException, IOException {
         this.url = url;
         URI uri = URI.create(url + "/register");
         HttpRequest request = HttpRequest.newBuilder()
@@ -33,11 +33,7 @@ public class KVTaskClient {
                 .build();
         httpClient = HttpClient.newHttpClient();
         HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
-        try {
-            token = (httpClient.send(request, handler)).body();
-        } catch (InterruptedException | IOException e) {
-            System.out.println("Ошибка при регистрации: " + e.getMessage());
-        }
+        token = (httpClient.send(request, handler)).body();
     }
     public void put(String key, String json) {
         URI uri = URI.create(url + "/save/" + key + "/?API_TOKEN=" + token);
@@ -66,7 +62,7 @@ public class KVTaskClient {
         }
         return response;
     }
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         new KVServer().start();
         KVTaskClient client = new KVTaskClient("http://localhost:8078");
         HttpTaskServer httpTaskServer = new HttpTaskServer();
