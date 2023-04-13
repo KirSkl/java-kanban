@@ -33,7 +33,7 @@ public class KVTaskClient {
                 .build();
         httpClient = HttpClient.newHttpClient();
         HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
-        token = (httpClient.send(request, handler)).body();
+        token = httpClient.send(request, handler).body();
     }
 
     public void put(String key, String json) {
