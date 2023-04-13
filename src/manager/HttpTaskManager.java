@@ -41,7 +41,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
         var priorTasks = gson.toJson(getPrioritizedTasks());
         client.put("/tasks", priorTasks);
     }
-    public static void load() throws IOException, InterruptedException {
+    public static HttpTaskManager load() throws IOException, InterruptedException {
         HttpTaskManager httpTaskManager = new HttpTaskManager(url);
         var loadTasks = client.load("/tasks/task");
         Type taskType = new TypeToken<ArrayList<Task>>() {}.getType();
@@ -72,5 +72,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
 
         Type priorTaskType = new TypeToken<Set<Task>>() {}.getType();
         httpTaskManager.prioritizedTasks = gson.fromJson(client.load("/tasks"), priorTaskType);
+
+        return httpTaskManager;
     }
 }
